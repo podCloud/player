@@ -1,4 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+
+import playerStore from "./stores/player";
+import { useRecoilState } from "recoil";
 
 import "./App.css";
 import EpisodeList from "./components/EpisodeList";
@@ -41,21 +44,41 @@ export default function App() {
     variables: { guid: "5fa3a8c5fc92823536cc66ce" },
   });
 
-  let [episodeListVisible, setEpisodeListVisible] = useState(false);
+  const [episodeListVisible, setEpisodeListVisible] = useState(false);
+  const [playerState, setPlayerState] = useRecoilState(playerStore);
 
-  let audioPlayer = useRef(undefined);
+  const audioPlayer = useRef(undefined);
+
+  useEffect(() => {
+    if (playerState.currentItem == null && data?.podcastItem) {
+      setPlayerState({
+        ...playerState,
+        currentItem: data.podcastItem,
+        podcast: data.podcastItem.podcast,
+      });
+    }
+
+    if (audioPlayer.current) {
+      const audioSrc = playerState.currentItem?.enclosure?.url;
+      if (audioPlayer.current.src !== audioSrc) {
+        audioPlayer.current.src = audioSrc;
+        audioPlayer.current.play();
+      }
+    }
+  }, [data, playerState, setPlayerState]);
 
   function toggleEpisodeList() {
     setEpisodeListVisible((current) => !current);
   }
-  console.log(JSON.stringify(data));
 
-  const { podcastItem: item } = data;
+  const { currentItem: item } = playerState;
 
-  return loading ? (
-    <p>Loading...</p>
-  ) : error ? (
+  console.log(playerState);
+
+  return error ? (
     <pre>error : {JSON.stringify(error)}</pre>
+  ) : loading || item == null ? (
+    <p>Loading...</p>
   ) : item?.enclosure ? (
     <div className="player">
       <div className="playerHead">

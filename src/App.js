@@ -32,8 +32,7 @@ export default function App() {
 	}, [playerStore, intervalCheck])
 
 	function updateTime() {
-		let durationObj = convertHMS(audioPlayer.current.currentTime);
-		setCurrentTime(durationObj.heure + ":" + durationObj.minute + ":" + durationObj.seconde)
+		setCurrentTime(convertHMS(audioPlayer.current.currentTime))
 
 		setPourcentageProgression(Math.trunc((audioPlayer.current.currentTime / audioPlayer.current.duration) * 10000) / 100)
 	}
@@ -84,7 +83,7 @@ export default function App() {
 					</div>
 					<div className="time">
 						<p id="audio-time">{currentTime}</p>
-						<p id="audio-duration">{playerStore.duration}</p>
+						<p id="audio-duration">{convertHMS(playerStore.duration)}</p>
 					</div>
 					<div className="controls">
 						<img src={"/backward.svg"} alt="-15s" onClick={moins15} />

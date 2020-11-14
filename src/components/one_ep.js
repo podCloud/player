@@ -5,6 +5,8 @@ import { useRecoilState } from "recoil";
 
 import "./one_ep.css";
 
+import { convertHMS } from "../utils"
+
 export default function EpList({ episode }) {
 	let [playerStore, setPlayerStore] = useRecoilState(playerAtom);
 
@@ -39,7 +41,7 @@ export default function EpList({ episode }) {
 		<div className="oneEpisode">
 			<img onClick={playMe} src={playerStore.guid === episode.guid && !playerStore.paused ? "/pause.svg" : "/play.svg"} alt={playerStore.guid === episode.guid && !playerStore.paused ? "Mettre en pause" : "Reprendre"} />
 			<p className="OneEpTitle">{episode.title}</p>
-			<p className="OneEpDuration">{episode.enclosure.duration}</p>
+			<p className="OneEpDuration">{convertHMS(episode.enclosure.duration)}</p>
 		</div>
 	)
 }

@@ -57,6 +57,33 @@ body {
 	text-decoration: none;
 }
 
+@media screen and (max-width: 490px) {
+	.playerHead{
+		flex-direction: column;
+	}
+
+	.playerHead > img {
+		width: 250px;
+		height: 250px;
+		border-radius: 4px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 10px;
+	}
+
+	.rightDivPlayer > #eptitle {
+		text-align: center;
+	}
+
+	.rightDivPlayer > #podtitle {
+		text-align: center;
+	}
+
+	.rightDivPlayer {
+		width: auto;
+	}
+}
+
 #download {
 	width: 15px;
 	margin-left: 5px;

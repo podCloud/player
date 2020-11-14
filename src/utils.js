@@ -12,5 +12,5 @@ export function convertHMS(pSec) {
 	sortie.seconde = Math.trunc(nbSec);
 	if (sortie.seconde < 10) { sortie.seconde = "0" + sortie.seconde }
 
-	return sortie
+	return sortie.heure + ":" + sortie.minute + ":" + sortie.seconde
 }

@@ -15,7 +15,7 @@ export default function EpList({ displayed }) {
 			{displayed ?
 				<div className="epList">
 					{playerStore.episodes.map(ep => (
-						<OneEp episode={ep} />
+						<OneEp key={ep.guid} episode={ep} />
 					))}
 				</div>
 				: <></>}

@@ -1,8 +1,8 @@
 .oneEpisode {
 	display: flex;
 	flex-direction: row;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	align-items: center;
 }
 
@@ -27,4 +27,18 @@
 	margin-bottom: 0px;
 	margin-top: 0px;
 	color: #B3B6B7;
+}
+
+.oneEpisode:nth-child(even) {
+	background-color: #34495E;
+}
+
+.oneEpisode:nth-child(odd) {
+	background-color: #2C3E50;
+}
+
+@media screen and (max-width: 490px) {
+	.OneEpDuration {
+		display: none;
+	}
 }

@@ -1,38 +1,116 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+	font-family: 'Lato', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.player {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.playerHead{
+	filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.5));
+	display: flex;
+	flex-direction: row;
+	padding: 10px;
+	background-color: #1C2833;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.playerHead > img {
+	width: 75px;
+	height: 75px;
+	border-radius: 4px;
 }
 
-.App-link {
-  color: #61dafb;
+.rightDivPlayer {
+	margin-left: 10px;
+	margin-top: 0px;
+	width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.rightDivPlayer > #eptitle {
+	margin-top: 3px;
+	margin-bottom: 0px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #F7F9F9;
+}
+
+#eptitle > a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.rightDivPlayer > #podtitle {
+	margin-top: 3px;
+	margin-bottom: 0px;
+	font-size: 15px;
+	font-style: italic;
+	color: #B3B6B7;
+}
+
+#podtitle > a {
+	color: inherit;
+	text-decoration: none;
+}
+
+#download {
+	width: 15px;
+	margin-left: 5px;
+}
+
+#progressbar {
+	text-align: left;
+    height: 10px;
+    background-color: #5D6D7E;
+    border-radius: 3px;
+    margin-top: 3px;
+}
+
+#progressbar:hover {
+    cursor: pointer;
+}
+
+#prog {
+    background-color: #3498DB;
+    height: 10px;
+	border-radius: 3px;
+	width: 0;
+}
+.time {
+    display: flex;
+    justify-content: space-between;
+}
+    
+.time > p {
+    margin-top: 1px;
+    color: #AEB6BF;
+    margin-bottom: 0px;
+}
+
+.controls {
+    display: flex;
+	justify-content: center;
+	align-items: baseline;
+}
+
+.controls {
+	margin-top: -15px;
+}
+.controls > :not( #playButton) {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 30px;
+}
+
+.controls > #playButton {
+	width: 40px;
+	height: 40px;
+}
+
+.controls > img:hover {
+	cursor: pointer;
 }

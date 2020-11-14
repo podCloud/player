@@ -50,28 +50,39 @@ export default function App() {
   }
   console.log(JSON.stringify(data));
 
+  const { podcastItem: item } = data;
+
   return loading ? (
     <p>Loading...</p>
   ) : error ? (
     <pre>error : {JSON.stringify(error)}</pre>
-  ) : (
+  ) : item?.enclosure ? (
     <div className="player">
       <div className="playerHead">
-        <audio ref={audioPlayer} hidden></audio>
-        <EpisodeCover episodeCoverUrl={""} episodeTitle={""} />
+        <audio ref={audioPlayer} src={item.enclosure.url} hidden></audio>
+        <EpisodeCover
+          episodeCoverUrl={item.enclosure.cover.medium_url}
+          episodeTitle={item.title}
+        />
         <div className="rightDivPlayer">
-          <EpisodeTitle episodeLink={""} episodeTitle={""} />
-          <PodcastTitle podcastLink={""} podcastTitle={""} audioSrc={""} />
+          <EpisodeTitle episodeLink={item.url} episodeTitle={item.title} />
+          <PodcastTitle
+            podcastLink={item.podcast.website_url}
+            podcastTitle={item.podcast.title}
+            audioSrc={item.enclosure.url}
+          />
           <PlayerProgressBar playerRef={audioPlayer} />
           <PlayerAudioTimer playerRef={audioPlayer} initialDuration={0} />
           <PlayerControls
             playerRef={audioPlayer}
-            episodeTitle={""}
+            episodeTitle={item.title}
             showEpList={toggleEpisodeList}
           />
         </div>
       </div>
       {episodeListVisible ?? <EpisodeList />}
     </div>
+  ) : (
+    <p>Ce post n'est pas un épisode avec média. Retrouvez le sur podCloud</p>
   );
 }

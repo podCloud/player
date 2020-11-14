@@ -8,7 +8,7 @@ import OneEp from "./one_ep"
 import "./ep_list.css";
 
 export default function EpList({ displayed }) {
-	let [playerStore, setPlayerStore] = useRecoilState(playerAtom);
+	let [playerStore,] = useRecoilState(playerAtom);
 
 	return (
 		<>

@@ -12,7 +12,7 @@ export default function App() {
 	let [playerStore, setPlayerStore] = useRecoilState(playerAtom);
 	let [currentTime, setCurrentTime] = useState("00:00:00");
 	let [pourcentageProgression, setPourcentageProgression] = useState("0%")
-	let [displayEpList, setDisplayEpList] = useState(true);
+	let [displayEpList, setDisplayEpList] = useState(false);
 
 	let audioPlayer = useRef(undefined);
 	let progressbar = useRef(undefined)
@@ -67,6 +67,10 @@ export default function App() {
 		updateTime();
 	}
 
+	function epList() {
+		setDisplayEpList(current => !current);
+	}
+
 	return (
 		<div className="player">
 			<div className="playerHead">
@@ -88,6 +92,7 @@ export default function App() {
 							alt={playerStore.paused ? "Reprendre " + playerStore.title : "Mettre en pause " + playerStore.title}
 							onClick={playPauseEp} />
 						<img src={"/forward.svg"} alt="+15s" onClick={plus15} />
+						<img src={"/list.svg"} alt="Liste des épisodes" onClick={epList} />
 					</div>
 				</div>
 			</div>

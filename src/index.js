@@ -1,22 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: "https://feeds.podcloud.fr/graphql",
-  cache: new InMemoryCache(),
-});
+import PodcloudPlayer from "./Podcloud/PodcloudPlayer";
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
+      <PodcloudPlayer />
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")

@@ -1,6 +1,7 @@
 import React from "react";
 
-const PlayerControls = ({ playerRef, episodeTitle, showEpList }) => {
+const PlayerControls = ({ playerRef, showEpisodeList }) => {
+
   function moins15() {
     playerRef.current.currentTime = playerRef.current.currentTime - 15;
   }
@@ -17,8 +18,8 @@ const PlayerControls = ({ playerRef, episodeTitle, showEpList }) => {
         src={!playerRef.current?.paused ? "/pause.svg" : "/play.svg"}
         alt={
           playerRef.current?.paused
-            ? "Reprendre " + episodeTitle
-            : "Mettre en pause " + episodeTitle
+            ? "Lecture"
+            : "Pause"
         }
         onClick={() =>
           playerRef.current &&
@@ -28,7 +29,7 @@ const PlayerControls = ({ playerRef, episodeTitle, showEpList }) => {
         }
       />
       <img src={"/forward.svg"} alt="+15s" onClick={plus15} />
-      <img src={"/list.svg"} alt="Liste des épisodes" onClick={showEpList} />
+      <img src={"/list.svg"} alt="Liste des épisodes" onClick={showEpisodeList} />
     </div>
   );
 };

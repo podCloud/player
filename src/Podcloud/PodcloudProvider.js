@@ -1,7 +1,5 @@
 import React from "react";
 
-import PodcloudLoader from "./PodcloudLoader";
-
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -11,11 +9,7 @@ const client = new ApolloClient({
 
 const PodcloudProvider = ({ guid, children }) => {
   console.log("Rendering provider");
-  return (
-    <ApolloProvider client={client}>
-      <PodcloudLoader guid={guid}>{children}</PodcloudLoader>
-    </ApolloProvider>
-  );
+  return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
 export default PodcloudProvider;

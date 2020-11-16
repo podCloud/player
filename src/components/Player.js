@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import playerStore from "../stores/player";
-import episodeStore from "../stores/episode";
 
 import { useRecoilState } from "recoil";
 
@@ -17,60 +16,86 @@ import {
   PlayerControls,
 } from "./PlayerElements";
 
-const Player = () => {
-  const [episodeListVisible, setEpisodeListVisible] = useState(false);
-
-  const audioPlayer = useRef(undefined);
+const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
+  const player = useRef();
 
   const [playerState, setPlayerState] = useRecoilState(playerStore);
 
   useEffect(() => {
-    if (audioPlayer.current) {
-      audioPlayer.current.addEventListener("timeupdate", function (ev) {
-        setPlayerState({
-          ...playerState,
-          currentTime: ev.target.currentTime,
-          duration: ev.target.duration,
+    const ref = player.current;
+    if (ref && ref.dataset.boundEvents !== "did") {
+      ref.dataset.boundEvents = "did";
+
+      (
+        "loadstart progress suspend abort error " +
+        "emptied stalled loadedmetadata loadeddata canplay canplaythrough " +
+        "playing waiting seeking seeked ended durationchange " +
+        "timeupdate play pause ratechange resize volumechange"
+      )
+        .split(" ")
+        .forEach((ev) => {
+          ref.addEventListener(ev.trim(), (e) => {
+            setPlayerState({
+              ...playerState,
+              hasVideo: ref.videoWidth > 0 || ref.videoHeight > 0,
+              duration: ref.duration,
+              currentTime: ref.currentTime,
+              paused: ref.paused,
+              ended: ref.ended,
+              networkState: ref.networkState,
+              readyState: ref.readyState,
+              muted: ref.muted,
+              loading: ref.networkState === 2,
+              playing: !(ref.ended || ref.seeking || ref.paused),
+            });
+          });
         });
-      });
     }
-  }, [audioPlayer, setPlayerState, playerState]);
-
-  const [episodeState] = useRecoilState(episodeStore);
-
-  const { enclosure_url, enclosure_duration } = episodeState;
+  }, [player, setPlayerState, playerState]);
 
   useEffect(() => {
-    if (audioPlayer.current) {
-      const audioSrc = enclosure_url;
+    if (player.current) {
+      const audioSrc = currentEpisode.enclosure_url;
 
-      if (audioPlayer.current.src !== audioSrc) {
-        audioPlayer.current.src = audioSrc;
-        audioPlayer.current.play();
+      if (player.current.src !== audioSrc) {
+        player.current.src = audioSrc;
+        player.current.play();
       }
     }
-  }, [audioPlayer, enclosure_url]);
+  }, [player, currentEpisode.enclosure_url]);
+
+  const [episodesListVisible, setEpisodesListVisible] = useState(false);
+  const showEpisodeListButton =
+    Array.isArray(episodesList) && episodesList.length > 0;
 
   return (
     <div className="player">
       <div className="playerHead">
-        <audio ref={audioPlayer} hidden preload="none" />
-        <EpisodeCover />
+        <video ref={player} hidden preload="none" />
+        <EpisodeCover currentEpisode={currentEpisode} />
         <div className="rightDivPlayer">
-          <EpisodeTitle />
-          <PodcastTitle />
-          <PlayerProgressBar playerRef={audioPlayer} />
+          <EpisodeTitle currentEpisode={currentEpisode} />
+          <PodcastTitle currentEpisode={currentEpisode} />
+          <PlayerProgressBar playerRef={player} />
           <PlayerAudioTimer
-            playerRef={audioPlayer}
-            initialDuration={enclosure_duration}
+            playerRef={player}
+            initialDuration={currentEpisode.duration}
           />
           <PlayerControls
-            playerRef={audioPlayer}
-            showEpList={() => setEpisodeListVisible((current) => !current)}
+            playerRef={player}
+            showEpisodeListButton={showEpisodeListButton}
+            showEpisodeListButtonFn={() =>
+              setEpisodesListVisible((current) => !current)
+            }
           />
         </div>
       </div>
-      {episodeListVisible ?? <EpisodeList />}
+      {showEpisodeListButton && episodesListVisible ? (
+        <EpisodeList
+          episodesList={episodesList}
+          setCurrentEpisode={setCurrentEpisode}
+        />
+      ) : null}
     </div>
   );
 };

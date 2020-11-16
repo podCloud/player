@@ -1,11 +1,7 @@
 import React from "react";
-import episodeStore from "../stores/episode";
-import { useRecoilState } from "recoil";
 
-const EpisodeTitle = () => {
-  const [episodeState] = useRecoilState(episodeStore);
-
-  const { url, title } = episodeState;
+const EpisodeTitle = ({ currentEpisode }) => {
+  const { url, title } = currentEpisode;
 
   return (
     <p id="eptitle">

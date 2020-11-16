@@ -1,15 +1,9 @@
 import React from "react";
-import episodeStore from "../stores/episode";
-import podcastStore from "../stores/podcast";
-import { useRecoilState } from "recoil";
 
-const PodcastTitle = () => {
-  const [episodeState] = useRecoilState(episodeStore);
-  const [podcastState] = useRecoilState(podcastStore);
+const PodcastTitle = ({ currentEpisode }) => {
+  const { enclosure_url } = currentEpisode;
 
-  const { enclosure_url } = episodeState;
-
-  const { url, title } = podcastState;
+  const { url, title } = currentEpisode.podcast;
 
   return (
     <p id="podtitle">

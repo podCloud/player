@@ -1,11 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useQuery, gql } from "@apollo/client";
-
-import { useRecoilState } from "recoil";
-
-import podcastStore from "../stores/podcast";
-import episodeStore from "../stores/episode";
 
 const GET_PODCAST_ITEM = gql`
   query episode($guid: String!) {
@@ -31,57 +26,42 @@ const GET_PODCAST_ITEM = gql`
   }
 `;
 
-const PodcloudLoader = ({ guid, children }) => {
+const PodcloudLoader = ({ guid, PlayerComponent }) => {
+  console.log("guid");
   const { loading, error, data } = useQuery(GET_PODCAST_ITEM, {
     variables: { guid },
   });
 
-  const [episodeState, setEpisodeState] = useRecoilState(episodeStore);
-  const [podcastState, setPodcastState] = useRecoilState(podcastStore);
-
-  console.log({ episodeState, podcastState });
+  const [currentEpisode, setCurrentEpisode] = useState();
 
   useEffect(() => {
-    if (!podcastState._id && data?.podcastItem?.podcast) {
-      console.log({
-        ...podcastState,
-        ...data.podcastItem.podcast,
-        url: data.podcastItem.podcast?.website_url,
-      });
-      setPodcastState({
-        ...podcastState,
-        ...data.podcastItem.podcast,
-        url: data.podcastItem.podcast?.website_url,
-      });
-    }
-
-    if (!episodeState._id && data?.podcastItem) {
-      console.log({
-        ...episodeState,
+    if (data?.podcastItem?._id) {
+      console.log("setCurrentEpisode");
+      setCurrentEpisode({
         ...data.podcastItem,
         enclosure_url: data.podcastItem.enclosure?.url,
         enclosure_duration: data.podcastItem.enclosure?.duration,
         cover: data.podcastItem.enclosure?.cover,
-      });
-
-      setEpisodeState({
-        ...episodeState,
-        ...data.podcastItem,
-        enclosure_url: data.podcastItem.enclosure?.url,
-        enclosure_duration: data.podcastItem.enclosure?.duration,
-        cover: data.podcastItem.enclosure?.cover,
+        podcast: {
+          ...data.podcastItem.podcast,
+          url: data.podcastItem.podcast?.website_url,
+        },
       });
     }
-  }, [data, podcastState, setPodcastState, episodeState, setEpisodeState]);
+  }, [data, setCurrentEpisode]);
 
   console.log("rendering loader");
+  console.log("currentEpisode", currentEpisode);
 
-  return loading || !podcastState._id || !episodeState._id ? (
-    <>Loading...</>
-  ) : error ? (
+  return error ? (
     <pre>{JSON.stringify(error, null, 3)}</pre>
+  ) : loading || !currentEpisode?._id ? (
+    <>Loading...</>
   ) : (
-    <>{children}</>
+    <PlayerComponent
+      currentEpisode={currentEpisode}
+      setCurrentEpisode={setCurrentEpisode}
+    />
   );
 };
 

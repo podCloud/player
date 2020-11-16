@@ -11,8 +11,12 @@ const playerState = atom({
     networkState: false,
     readyState: false,
     muted: false,
-      loading: false,
+    loading: false,
     playing: false,
+    src: null,
+    minus15: () => console.log("No player ref yet"),
+    plus15: () => console.log("No player ref yet"),
+    playPause: () => console.log("No player ref yet"),
   },
 });
 

@@ -1,9 +1,9 @@
 import React from "react";
 
-const PodcastTitle = ({ currentEpisode }) => {
+const PodcastTitle = ({ currentEpisode, currentPodcast }) => {
   const { enclosure_url } = currentEpisode;
 
-  const { url, title } = currentEpisode.podcast;
+  const { url, title } = currentPodcast;
 
   return (
     <p id="podtitle">

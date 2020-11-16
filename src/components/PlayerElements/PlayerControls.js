@@ -3,60 +3,36 @@ import React from "react";
 import playerStore from "../../stores/player";
 import { useRecoilState } from "recoil";
 
-const PlayerControls = ({
-  playerRef,
-  showEpisodesListButton,
-  showEpisodeListButtonFn,
-}) => {
+import "./PlayerControls.css";
+
+import classNames from "classnames";
+
+const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
   const [playerState] = useRecoilState(playerStore);
 
-  const { playing, seeking, loading } = playerState;
+  const { playing, seeking, loading, minus15, playPause, plus15 } = playerState;
 
-  const player = playerRef.current;
-
-  function moins15() {
-    player.currentTime = player.currentTime - 15;
-    if (player.paused) {
-      player.play();
-    }
-  }
-
-  function plus15() {
-    player.currentTime = player.currentTime + 15;
-    if (player.paused) {
-      player.play();
-    }
-  }
-
-  function togglePlayPause() {
-    if (player.seeking || player.networkSate === 2) {
-      console.log("ignoring playPause when loading");
-      return false;
-    }
-
-    if (!player.paused && !player.ended) {
-      player.pause();
-    } else {
-      player.play();
-    }
-  }
+  const hasShowEpisodesListButtonFn =
+    typeof showEpisodesListButtonFn === "function";
 
   return (
     <div className="controls">
-      <img src={"/backward.svg"} alt="-15s" onClick={moins15} />
+      <img src={"/backward.svg"} alt="-15s" onClick={minus15} />
       <img
         id="playButton"
-        src={playing || seeking || loading ? "/pause.svg" : "/play.svg"}
-        alt={playing || seeking || loading ? "Pause" : "Play"}
+        src={playing ? "/pause.svg" : "/play.svg"}
+        alt={playing ? "Pause" : "Play"}
         style={{ opacity: seeking || loading ? 0.2 : 1 }}
-        onClick={togglePlayPause}
+        className={classNames("pulse-animation", { on: seeking || loading })}
+        onClick={playPause}
       />
       <img src={"/forward.svg"} alt="+15s" onClick={plus15} />
-      {showEpisodesListButton ? (
+      {episodesListLoading || hasShowEpisodesListButtonFn ? (
         <img
           src={"/list.svg"}
           alt="Liste des épisodes"
-          onClick={showEpisodeListButtonFn}
+          className={classNames("pulse-animation", { on: episodesListLoading })}
+          onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
         />
       ) : null}
     </div>

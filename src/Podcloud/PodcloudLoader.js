@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useLazyQuery, gql } from "@apollo/client";
 
 const GET_PODCAST_ITEM = gql`
   query episode($guid: String!) {
@@ -26,40 +26,97 @@ const GET_PODCAST_ITEM = gql`
   }
 `;
 
+const GET_PODCAST_ITEMS = gql`
+  query podcast($podcast_id: String!) {
+    podcast(_id: $podcast_id) {
+      items {
+        _id
+        title
+        url
+        ... on Episode {
+          enclosure {
+            duration
+            url
+            cover {
+              medium_url
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const podcloudItemToPlayerItem = (ep) => ({
+  ...ep,
+  enclosure_url: ep.enclosure?.url,
+  enclosure_duration: ep.enclosure?.duration,
+  cover: ep.enclosure?.cover,
+});
+
 const PodcloudLoader = ({ guid, PlayerComponent }) => {
   console.log("guid");
-  const { loading, error, data } = useQuery(GET_PODCAST_ITEM, {
+
+  const [currentEpisode, setCurrentEpisode] = useState();
+  const [currentPodcast, setCurrentPodcast] = useState();
+
+  const episode = useQuery(GET_PODCAST_ITEM, {
     variables: { guid },
   });
 
-  const [currentEpisode, setCurrentEpisode] = useState();
+  const [loadPodcastEpisodes, podcastEpisodes] = useLazyQuery(
+    GET_PODCAST_ITEMS,
+    {
+      variables: { podcast_id: currentPodcast?._id },
+    }
+  );
 
   useEffect(() => {
-    if (data?.podcastItem?._id) {
+    const ep = episode?.data?.podcastItem;
+    if (ep?._id) {
       console.log("setCurrentEpisode");
-      setCurrentEpisode({
-        ...data.podcastItem,
-        enclosure_url: data.podcastItem.enclosure?.url,
-        enclosure_duration: data.podcastItem.enclosure?.duration,
-        cover: data.podcastItem.enclosure?.cover,
-        podcast: {
-          ...data.podcastItem.podcast,
-          url: data.podcastItem.podcast?.website_url,
-        },
+      setCurrentEpisode(podcloudItemToPlayerItem(ep));
+      setCurrentPodcast({
+        ...ep.podcast,
+        url: ep.podcast?.website_url,
       });
     }
-  }, [data, setCurrentEpisode]);
+  }, [episode?.data, setCurrentEpisode, setCurrentPodcast]);
+
+  useEffect(() => {
+    if (currentPodcast?._id) {
+      console.log("loading episodes list");
+      loadPodcastEpisodes();
+    }
+  }, [currentPodcast?._id, loadPodcastEpisodes]);
 
   console.log("rendering loader");
   console.log("currentEpisode", currentEpisode);
 
-  return error ? (
-    <pre>{JSON.stringify(error, null, 3)}</pre>
-  ) : loading || !currentEpisode?._id ? (
+  const episodesList = podcastEpisodes?.loading
+    ? { loading: true }
+    : Array.isArray(podcastEpisodes?.data?.podcast?.items)
+    ? podcastEpisodes.data.podcast.items.map(podcloudItemToPlayerItem)
+    : [];
+
+  console.log({ podcastEpisodes, episodesList });
+
+  if (podcastEpisodes?.error) {
+    console.error(podcastEpisodes.error, podcastEpisodes);
+  }
+
+  const loading =
+    episode.loading || !currentEpisode?._id || !currentPodcast._id;
+
+  return episode.error ? (
+    <pre>{JSON.stringify(episode.error, null, 3)}</pre>
+  ) : loading ? (
     <>Loading...</>
   ) : (
     <PlayerComponent
       currentEpisode={currentEpisode}
+      currentPodcast={currentPodcast}
+      episodesList={episodesList}
       setCurrentEpisode={setCurrentEpisode}
     />
   );

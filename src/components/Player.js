@@ -4,7 +4,7 @@ import playerStore from "../stores/player";
 
 import { useRecoilState } from "recoil";
 
-import EpisodeList from "./EpisodeList";
+import EpisodesList from "./EpisodesList";
 
 import PodcastTitle from "./PodcastTitle";
 import EpisodeTitle from "./EpisodeTitle";
@@ -16,16 +16,21 @@ import {
   PlayerControls,
 } from "./PlayerElements";
 
-const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
+const Player = ({
+  currentEpisode,
+  currentPodcast,
+  episodesList,
+  setCurrentEpisode,
+}) => {
   const player = useRef();
 
-  const [playerState, setPlayerState] = useRecoilState(playerStore);
+  const [, setPlayerState] = useRecoilState(playerStore);
 
   useEffect(() => {
     const ref = player.current;
+
     if (ref && ref.dataset.boundEvents !== "did") {
       ref.dataset.boundEvents = "did";
-
       (
         "loadstart progress suspend abort error " +
         "emptied stalled loadedmetadata loadeddata canplay canplaythrough " +
@@ -35,7 +40,11 @@ const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
         .split(" ")
         .forEach((ev) => {
           ref.addEventListener(ev.trim(), (e) => {
-            setPlayerState({
+            if (e?.error) {
+              console.error(e.error);
+            }
+
+            setPlayerState((playerState) => ({
               ...playerState,
               hasVideo: ref.videoWidth > 0 || ref.videoHeight > 0,
               duration: ref.duration,
@@ -47,26 +56,68 @@ const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
               muted: ref.muted,
               loading: ref.networkState === 2,
               playing: !(ref.ended || ref.seeking || ref.paused),
-            });
+              src: ref.src,
+            }));
           });
         });
+
+      console.log("adding funcs to playerState");
+      setPlayerState((playerState) => ({
+        ...playerState,
+        minus15: () => {
+          ref.currentTime = ref.currentTime - 15;
+          if (ref.paused) {
+            ref.play().catch((error) => {
+              ref.dispatchEvent(new ErrorEvent(error, {}));
+            });
+          }
+        },
+        plus15: () => {
+          ref.currentTime = ref.currentTime + 15;
+          if (ref.paused) {
+            ref.play().catch((error) => {
+              ref.dispatchEvent(new ErrorEvent(error, {}));
+            });
+          }
+        },
+        playPause: () => {
+          const loading = ref.seeking || ref.networkState === 2;
+
+          if (loading || (!ref.paused && !ref.ended)) {
+            ref.pause();
+          } else {
+            ref.play().catch((error) => {
+              ref.dispatchEvent(new ErrorEvent(error, {}));
+            });
+          }
+        },
+      }));
     }
-  }, [player, setPlayerState, playerState]);
+  }, [player, setPlayerState]);
 
   useEffect(() => {
-    if (player.current) {
+    const ref = player.current;
+
+    if (ref) {
+      const playerSrc = ref.src;
       const audioSrc = currentEpisode.enclosure_url;
 
-      if (player.current.src !== audioSrc) {
-        player.current.src = audioSrc;
-        player.current.play();
+      if (playerSrc !== audioSrc) {
+        ref.src = audioSrc;
+        if (ref.dataset.had_src_before) {
+          ref.play().catch((error) => {
+            debugger;
+            ref.dispatchEvent(new ErrorEvent(error, {}));
+          });
+        } else {
+          ref.dataset.had_src_before = true;
+        }
       }
     }
   }, [player, currentEpisode.enclosure_url]);
 
   const [episodesListVisible, setEpisodesListVisible] = useState(false);
-  const showEpisodeListButton =
-    Array.isArray(episodesList) && episodesList.length > 0;
+  const showEpisodesList = episodesList?.loading || episodesList?.length > 0;
 
   return (
     <div className="player">
@@ -75,7 +126,10 @@ const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
         <EpisodeCover currentEpisode={currentEpisode} />
         <div className="rightDivPlayer">
           <EpisodeTitle currentEpisode={currentEpisode} />
-          <PodcastTitle currentEpisode={currentEpisode} />
+          <PodcastTitle
+            currentEpisode={currentEpisode}
+            currentPodcast={currentPodcast}
+          />
           <PlayerProgressBar playerRef={player} />
           <PlayerAudioTimer
             playerRef={player}
@@ -83,17 +137,24 @@ const Player = ({ currentEpisode, episodesList, setCurrentEpisode }) => {
           />
           <PlayerControls
             playerRef={player}
-            showEpisodeListButton={showEpisodeListButton}
-            showEpisodeListButtonFn={() =>
-              setEpisodesListVisible((current) => !current)
+            episodesListLoading={episodesList?.loading}
+            showEpisodesListButtonFn={
+              showEpisodesList
+                ? () => {
+                    setEpisodesListVisible((current) => {
+                      return !current;
+                    });
+                  }
+                : null
             }
           />
         </div>
       </div>
-      {showEpisodeListButton && episodesListVisible ? (
-        <EpisodeList
+      {showEpisodesList ? (
+        <EpisodesList
           episodesList={episodesList}
           setCurrentEpisode={setCurrentEpisode}
+          style={episodesListVisible ? {} : { display: "none" }}
         />
       ) : null}
     </div>

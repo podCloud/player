@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+body {
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+  background: transparent;
+  display: flex;
+  margin: 0;
+  color: #FFF;
+}
+
+#root {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+a,
+a:link,
+a:visited {
+  color: #FFF;
+  text-decoration: none;
+}
+a:hover {
+  color: #dedede;
+}

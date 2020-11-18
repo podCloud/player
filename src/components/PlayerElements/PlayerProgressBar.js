@@ -3,48 +3,33 @@ import React, { useRef } from "react";
 import playerStore from "../../stores/player";
 import { useRecoilState } from "recoil";
 
-const PlayerProgressBar = ({ playerRef }) => {
-	const [playerState] = useRecoilState(playerStore);
+import styles from "./PlayerProgressBar.module.scss";
 
-	const progressbarRef = useRef();
+const PlayerProgressBar = () => {
+  const [playerState] = useRecoilState(playerStore);
 
-	const { currentTime, duration } = playerState;
+  const progressbarRef = useRef();
 
-	const percent =
-		Math.trunc(((currentTime || 0) / (duration || 1)) * 10000) / 100;
+  const { percent, seekToPercent } = playerState;
 
-	function updateTime(event) {
-		if (playerRef.current && event.target === progressbarRef.current) {
-			const percent = event.nativeEvent.offsetX / event.target.offsetWidth;
-			const player = playerRef.current;
-			const jump = () => {
-				player.currentTime = percent * player.duration;
-				console.log(
-					"jump to " + percent.toFixed(2) + " : " + player.currentTime
-				);
-			};
+  function updateTime(event) {
+    const pgbar = progressbarRef.current;
+    if (pgbar && event.target === pgbar) {
+      const percent = event.nativeEvent.offsetX / event.target.offsetWidth;
+      seekToPercent(percent);
+      pgbar.style.width = `${percent} %`;
+    }
+  }
 
-			if (player.readyState === 1) {
-				jump();
-			} else {
-				player.play().then(() => {
-					player.pause();
-					jump();
-				})
-			}
-		} else {
-			debugger;
-		}
-	}
-
-	return (
-		<div id="progressbar" ref={progressbarRef} onClick={updateTime}>
-			<div
-				id="prog"
-				style={{ width: percent + "%", pointerEvents: "none" }}
-			></div>
-		</div>
-	);
+  return (
+    <div
+      className={styles.progress_bar}
+      ref={progressbarRef}
+      onClick={updateTime}
+    >
+      <div className={styles.bar} style={{ width: percent + "%" }}></div>
+    </div>
+  );
 };
 
 export default PlayerProgressBar;

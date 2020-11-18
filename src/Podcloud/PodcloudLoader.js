@@ -13,7 +13,9 @@ const GET_PODCAST_ITEM = gql`
           duration
           url
           cover {
+            small_url
             medium_url
+            big_url
           }
         }
       }
@@ -38,7 +40,9 @@ const GET_PODCAST_ITEMS = gql`
             duration
             url
             cover {
+              small_url
               medium_url
+              big_url
             }
           }
         }

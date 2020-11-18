@@ -1,5 +1,5 @@
 import PlayerProgressBar from "./PlayerProgressBar";
-import PlayerAudioTimer from "./PlayerAudioTimer";
+import PlayerTimecodes from "./PlayerTimecodes";
 import PlayerControls from "./PlayerControls";
 
-export { PlayerProgressBar, PlayerAudioTimer, PlayerControls };
+export { PlayerProgressBar, PlayerTimecodes, PlayerControls };

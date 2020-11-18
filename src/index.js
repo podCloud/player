@@ -5,6 +5,8 @@ import { RecoilRoot } from "recoil";
 
 import PodcloudPlayer from "./Podcloud/PodcloudPlayer";
 
+import "./index.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>

@@ -1,0 +1,14 @@
+.title {
+  font-size: 14px;
+  margin-block-start: 0;
+  margin-block-end: 1vh;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  @media (max-width: 260px) {
+    font-size: 4.5vw;
+  }
+
+  @media (max-height: 160px) {
+    font-size: 8vh;
+  }
+}

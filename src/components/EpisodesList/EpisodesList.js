@@ -2,11 +2,13 @@ import React from "react";
 
 import EpisodesListItem from "./EpisodesListItem";
 
-import "./EpisodesList.css";
+import classnames from "classnames";
 
-const EpisodesList = ({ episodesList, setCurrentEpisode, style }) => {
+import styles from "./EpisodesList.module.scss";
+
+const EpisodesList = ({ episodesList, setCurrentEpisode, open }) => {
   return Array.isArray(episodesList) && episodesList.length > 0 ? (
-    <div className="epList" style={style}>
+    <div className={classnames(styles.list, { [styles.open]: open })}>
       {episodesList.map((ep) => (
         <EpisodesListItem
           key={ep._id}

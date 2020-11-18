@@ -1,19 +1,16 @@
 import React from "react";
 
-const PodcastTitle = ({ currentEpisode, currentPodcast }) => {
-  const { enclosure_url } = currentEpisode;
+import styles from "./PodcastTitle.module.scss";
 
+const PodcastTitle = ({ currentPodcast }) => {
   const { url, title } = currentPodcast;
 
   return (
-    <p id="podtitle">
-      <a href={url} alt={"Découvrir le podcast " + title + " sur podCloud"}>
+    <h2 className={styles.title}>
+      <a href={url} alt={"Découvrir le podcast " + title}>
         {title}
-      </a>{" "}
-      <a href={enclosure_url} alt="Télécharger">
-        <img id="download" src="/download.svg" alt="Télécharger" />
       </a>
-    </p>
+    </h2>
   );
 };
 

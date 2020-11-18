@@ -1,11 +1,14 @@
 import React from "react";
 
-import "./EpisodesListItem.css";
+import styles from "./EpisodesListItem.module.scss";
 
 import playerStore from "../../stores/player";
 import { useRecoilState } from "recoil";
 
 import { convertHMS } from "../../utils";
+
+import PlayIcon from "../Icons/Play";
+import PauseIcon from "../Icons/Pause";
 
 const EpisodesListItem = ({ episode, setCurrentEpisode }) => {
   const [playerState] = useRecoilState(playerStore);
@@ -23,14 +26,25 @@ const EpisodesListItem = ({ episode, setCurrentEpisode }) => {
   }
 
   return (
-    <div className="oneEpisode">
-      <img
+    <div className={styles.episode}>
+      <div
+        className={styles.button}
         onClick={playPauseMe}
-        src={currently_me && playing ? "/pause.svg" : "/play.svg"}
-        alt={currently_me && playing ? "Mettre en pause" : "Reprendre"}
-      />
-      <p className="OneEpTitle">{episode.title}</p>
-      <p className="OneEpDuration">{convertHMS(episode.enclosure_duration)}</p>
+        aria-label={currently_me && playing ? "Mettre en pause" : "Reprendre"}
+      >
+        {currently_me && playing ? <PauseIcon /> : <PlayIcon />}
+      </div>
+      <a
+        href={episode.url}
+        target="_blank"
+        rel="noreferrer"
+        className={styles.title}
+      >
+        {episode.title}
+      </a>
+      <div className={styles.duration}>
+        {convertHMS(episode.enclosure_duration)}
+      </div>
     </div>
   );
 };

@@ -3,9 +3,9 @@
 body {
   font-family: "Lato", Helvetica, Arial, sans-serif;
   background: transparent;
-  display: flex;
   margin: 0;
-  color: #FFF;
+  color: #fff;
+  background: transparent;
 }
 
 #root {
@@ -15,12 +15,16 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 a,
 a:link,
 a:visited {
-  color: #FFF;
+  color: #fff;
   text-decoration: none;
 }
 a:hover {

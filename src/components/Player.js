@@ -29,11 +29,10 @@ const Player = ({
 
   return (
     <div className={styles.wrapper}>
-      <EpisodeCover currentEpisode={currentEpisode} large={true} />
+      <MediaPlayer mediaUrl={currentEpisode.enclosure_url} />
+      <EpisodeCover currentEpisode={currentEpisode} />
       <div className={styles.player}>
-        <MediaPlayer mediaUrl={currentEpisode.enclosure_url} />
         <div className={styles.head}>
-          <EpisodeCover currentEpisode={currentEpisode} />
           <div className={styles.titles}>
             <EpisodeTitle currentEpisode={currentEpisode} />
             <PodcastTitle currentPodcast={currentPodcast} />

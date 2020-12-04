@@ -1,12 +1,7 @@
 .playback_rate {
-  line-height: 20px;
-  font-size: 15px;
-  &.small {
-    font-size: 11px;
-  }
+  font-size: 11px;
 
   user-select: none;
-  border: 3px solid white;
   padding: 3px 8px;
   margin: 0 5px;
   width: 26px;
@@ -15,21 +10,4 @@
   max-height: 20px;
   text-align: center;
   font-weight: 900;
-
-  @media (max-width: 260px) {
-    font-size: 4.5vw;
-    &.small {
-      font-size: 3vw;
-    }
-    padding: 1vw;
-    border: solid 1vw white;
-  }
-  @media (max-height: 160px) {
-    font-size: 8vh;
-    &.small {
-      font-size: 4vh;
-    }
-    padding: 1vw;
-    border: solid 1vh white;
-  }
 }

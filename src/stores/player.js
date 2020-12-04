@@ -22,6 +22,7 @@ const playerState = atom({
     playPause: () => console.log("No player ref yet"),
     seekToPercent: () => console.log("No player ref yet"),
     togglePlaybackRate: () => console.log("No player ref yet"),
+    toggleFullscreen: () => console.log("No player ref yet"),
   },
 });
 

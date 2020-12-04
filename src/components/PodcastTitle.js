@@ -7,9 +7,16 @@ const PodcastTitle = ({ currentPodcast }) => {
 
   return (
     <h2 className={styles.title}>
-      <a href={url} alt={"Découvrir le podcast " + title}>
+      {/* eslint-disable react/jsx-no-target-blank */}
+      <a
+        href={url}
+        alt={"Découvrir le podcast " + title}
+        title={"Découvrir le podcast " + title}
+        target="_blank"
+      >
         {title}
       </a>
+      {/* eslint-enable react/jsx-no-target-blank */}
     </h2>
   );
 };

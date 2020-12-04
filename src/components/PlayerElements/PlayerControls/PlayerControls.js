@@ -28,7 +28,9 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
     minus15,
     playPause,
     plus15,
+    hasVideo,
     togglePlaybackRate,
+    toggleFullscreen,
   } = playerState;
 
   const hasShowEpisodesListButtonFn =
@@ -42,17 +44,24 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
         title={playing ? "Pause" : "Play"}
         primary={true}
         className={classnames(styles.pulse_animation, {
-          [styles.on]: !playing && (seeking || loading),
+          [styles.on]: seeking || loading,
         })}
         onClick={playPause}
       />
       <PlayerControl Icon={Next} title="+15s" onClick={plus15} />
-      <PlayerControlSpacer />
+      {hasVideo && (
+        <PlayerControl
+          Icon={() => <div>Plein écran</div>}
+          title="Plein écran"
+          onClick={toggleFullscreen}
+        />
+      )}
       <PlayerControl
         Icon={PlaybackRate}
         rate={playbackRate}
         onClick={togglePlaybackRate}
       />
+      <PlayerControlSpacer />
       {episodesListLoading || hasShowEpisodesListButtonFn ? (
         <PlayerControl
           Icon={List}

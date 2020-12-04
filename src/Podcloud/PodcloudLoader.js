@@ -7,7 +7,7 @@ const GET_PODCAST_ITEM = gql`
     podcastItem(_id: $guid) {
       _id
       title
-      url
+      podcloud_url
       ... on Episode {
         enclosure {
           duration
@@ -23,6 +23,9 @@ const GET_PODCAST_ITEM = gql`
         _id
         title
         website_url
+        platforms {
+          podcloud_url
+        }
       }
     }
   }
@@ -34,7 +37,7 @@ const GET_PODCAST_ITEMS = gql`
       items {
         _id
         title
-        url
+        podcloud_url
         ... on Episode {
           enclosure {
             duration
@@ -58,7 +61,7 @@ const podcloudItemToPlayerItem = (ep) => ({
   cover: ep.enclosure?.cover,
 });
 
-const PodcloudLoader = ({ guid, PlayerComponent }) => {
+const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   console.log("guid");
 
   const [currentEpisode, setCurrentEpisode] = useState();
@@ -88,11 +91,11 @@ const PodcloudLoader = ({ guid, PlayerComponent }) => {
   }, [episode?.data, setCurrentEpisode, setCurrentPodcast]);
 
   useEffect(() => {
-    if (currentPodcast?._id) {
+    if (currentPodcast?._id && list === true) {
       console.log("loading episodes list");
       loadPodcastEpisodes();
     }
-  }, [currentPodcast?._id, loadPodcastEpisodes]);
+  }, [currentPodcast?._id, list, loadPodcastEpisodes]);
 
   console.log("rendering loader");
   console.log("currentEpisode", currentEpisode);

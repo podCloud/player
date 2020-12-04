@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import EpisodesList from "./EpisodesList";
 
+import EpisodeCover from "./EpisodeCover";
 import EpisodeTitle from "./EpisodeTitle";
 import PodcastTitle from "./PodcastTitle";
 

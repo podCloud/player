@@ -1,8 +1,7 @@
 .controls {
   display: flex;
-  flex-direction: row;
-  width: 100%;
   align-items: center;
+  padding: 10px;
 }
 
 @keyframes pulse {
@@ -23,6 +22,6 @@
 .pulse_animation {
   transition: opacity 0.5s, transform 0.5s;
   &.on {
-    animation: pulse 2s infinite ease-in-out;
+    animation: pulse 1s infinite ease-in-out;
   }
 }

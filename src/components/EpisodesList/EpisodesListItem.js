@@ -34,14 +34,11 @@ const EpisodesListItem = ({ episode, setCurrentEpisode }) => {
       >
         {currently_me && playing ? <PauseIcon /> : <PlayIcon />}
       </div>
-      <a
-        href={episode.url}
-        target="_blank"
-        rel="noreferrer"
-        className={styles.title}
-      >
+      {/* eslint-disable react/jsx-no-target-blank */}
+      <a href={episode.podcloud_url} target="_blank" className={styles.title}>
         {episode.title}
       </a>
+      {/* eslint-enable react/jsx-no-target-blank */}
       <div className={styles.duration}>
         {convertHMS(episode.enclosure_duration)}
       </div>

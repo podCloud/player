@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { useQuery, useLazyQuery, gql } from "@apollo/client";
 
+import { useTranslation } from "react-i18next";
+
+import { Trans } from "react-i18next";
+
 const GET_PODCAST_ITEM = gql`
   query episode($guid: String!) {
     podcastItem(_id: $guid) {
@@ -62,7 +66,7 @@ const podcloudItemToPlayerItem = (ep) => ({
 });
 
 const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
-  console.log("guid");
+  const { t } = useTranslation();
 
   const [currentEpisode, setCurrentEpisode] = useState();
   const [currentPodcast, setCurrentPodcast] = useState();
@@ -108,18 +112,18 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
 
   console.log({ podcastEpisodes, episodesList });
 
+  if (episode?.error) {
+    console.error("episode error", episode.error, episode);
+  }
   if (podcastEpisodes?.error) {
-    console.error(podcastEpisodes.error, podcastEpisodes);
+    console.error("podcast episodes", podcastEpisodes.error, podcastEpisodes);
   }
 
-  episode.error &&
-    console.error("error loading episode", episode.error, episode);
-
   return episode.error ? (
-    <>An error occured. Please try again later.</>
+    <>{t("error_occured")}</>
   ) : episode.loading ? (
-    <>Loading...</>
-  ) : episode._id ? (
+    <>{t("loading")}</>
+  ) : currentEpisode?._id ? (
     <PlayerComponent
       currentEpisode={currentEpisode}
       currentPodcast={currentPodcast}
@@ -127,14 +131,13 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
       setCurrentEpisode={setCurrentEpisode}
     />
   ) : (
-    <>
-      This episode does not exists.&nbsp;
+    <Trans i18nKey="unknown_episode">
       {/* eslint-disable react/jsx-no-target-blank */}
-      <a href="https://podcloud.fr" target="_blank">
-        Discover more podcasts on podCloud
-      </a>
+      {/* eslint-disable jsx-a11y/anchor-has-content */}
+      <a href="https://podcloud.fr" target="_blank" />
+      {/* eslint-enable jsx-a11y/anchor-has-content */}
       {/* eslint-enable react/jsx-no-target-blank */}
-    </>
+    </Trans>
   );
 };
 

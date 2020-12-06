@@ -12,11 +12,7 @@ const PodcloudPlayer = () => {
 
   return (
     <PodcloudProvider>
-      <PodcloudLoader
-        guid={guid || "5f68d064223e221f7a89f5c4"}
-        list={list}
-        PlayerComponent={Player}
-      />
+      <PodcloudLoader guid={guid} list={list} PlayerComponent={Player} />
     </PodcloudProvider>
   );
 };

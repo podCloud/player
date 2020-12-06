@@ -112,20 +112,29 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
     console.error(podcastEpisodes.error, podcastEpisodes);
   }
 
-  const loading =
-    episode.loading || !currentEpisode?._id || !currentPodcast._id;
+  episode.error &&
+    console.error("error loading episode", episode.error, episode);
 
   return episode.error ? (
-    <pre>{JSON.stringify(episode.error, null, 3)}</pre>
-  ) : loading ? (
+    <>An error occured. Please try again later.</>
+  ) : episode.loading ? (
     <>Loading...</>
-  ) : (
+  ) : episode._id ? (
     <PlayerComponent
       currentEpisode={currentEpisode}
       currentPodcast={currentPodcast}
       episodesList={episodesList}
       setCurrentEpisode={setCurrentEpisode}
     />
+  ) : (
+    <>
+      This episode does not exists.&nbsp;
+      {/* eslint-disable react/jsx-no-target-blank */}
+      <a href="https://podcloud.fr" target="_blank">
+        Discover more podcasts on podCloud
+      </a>
+      {/* eslint-enable react/jsx-no-target-blank */}
+    </>
   );
 };
 

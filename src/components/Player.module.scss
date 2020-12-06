@@ -10,6 +10,17 @@
   overflow: hidden;
   border-radius: 8px;
   background-color: hsl(0deg, 0%, 40%);
+  color: #fbfbfb;
+  a,
+  a:link,
+  a:visited {
+    color: #fbfbfb;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #dedede;
+    border-bottom: 1px dashed #dedede;
+  }
 }
 
 .player {

@@ -45,9 +45,9 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
       <PlayerControl
         Icon={playing ? Pause : Play}
         title={playing ? t("pause") : t("play")}
-        primary={true}
-        className={classnames(styles.pulse_animation, {
+        className={classnames(styles.play_pause, styles.pulse_animation, {
           [styles.on]: seeking || loading,
+          [styles.pause]: playing,
         })}
         onClick={playPause}
       />

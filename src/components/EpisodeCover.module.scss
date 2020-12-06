@@ -1,7 +1,10 @@
 .cover {
   height: 100%;
-  padding-right: 10px;
   img {
     height: 100%;
+  }
+
+  @media (max-width: 450px) {
+    display: none;
   }
 }

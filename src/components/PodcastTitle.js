@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./PodcastTitle.module.scss";
 
 const PodcastTitle = ({ currentPodcast }) => {
-  const { url, title } = currentPodcast;
+  const { podcloud_url, title } = currentPodcast;
   const { t } = useTranslation();
 
   const discover_on_podcloud = t("discover_on_podcloud", { title });
@@ -14,7 +14,7 @@ const PodcastTitle = ({ currentPodcast }) => {
     <h2 className={styles.title}>
       {/* eslint-disable react/jsx-no-target-blank */}
       <a
-        href={url}
+        href={podcloud_url}
         alt={discover_on_podcloud}
         title={discover_on_podcloud}
         target="_blank"

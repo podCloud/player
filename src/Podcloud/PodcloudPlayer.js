@@ -7,8 +7,15 @@ import Player from "../components/Player";
 const PodcloudPlayer = () => {
   // get guid or feed_id from url
 
-  const guid = (document.location.pathname.match(/guid\/([\w\d]+)/) || [])[1];
+  let guid = (document.location.pathname.match(/guid\/([\w\d]+)/) || [])[1];
   const list = document.location.pathname.includes("list/true");
+
+  if (!guid) {
+    const meta = document.querySelector("meta[property='podcloud:item_id']");
+    if (meta) {
+      guid = meta.content;
+    }
+  }
 
   return (
     <PodcloudProvider>

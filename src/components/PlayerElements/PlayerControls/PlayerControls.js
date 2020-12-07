@@ -18,6 +18,7 @@ import Prev from "../../Icons/Prev";
 import Next from "../../Icons/Next";
 import PlaybackRate from "../../Icons/PlaybackRate";
 import List from "../../Icons/List";
+import FullScreen from "../../Icons/FullScreen";
 
 const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
   const [playerState] = useRecoilState(playerStore);
@@ -54,7 +55,7 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
       <PlayerControl Icon={Next} title={t("plus15")} onClick={plus15} />
       {hasVideo && (
         <PlayerControl
-          Icon={() => <div>Plein écran</div>}
+          Icon={FullScreen}
           title={t("fullscreen")}
           onClick={toggleFullscreen}
         />

@@ -34,6 +34,7 @@ const Player = ({
       <a
         href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
         target="_blank"
+        style={{ zIndex: 999999 }}
       >
         <PodCloud className={styles.podcloud_logo} noOutline={true} />
       </a>

@@ -1,38 +1,12 @@
 .control {
-  height: 25px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  height: 20px;
   cursor: pointer;
-  margin: 0 4px;
 
-  img {
-    width: 100%;
-  }
+  img,
   svg {
     height: 100%;
   }
 
-  &.primary {
-    height: 40px;
-    margin-top: -5px;
-  }
-
-  @media (max-width: 260px) {
-    height: 15vw;
-    &.primary {
-      height: 17vw;
-    }
-  }
-
-  @media (max-height: 160px) {
-    height: 25vh;
-    &.primary {
-      height: 27vh;
-    }
-  }
   &:hover {
-    filter: drop-shadow(0px 0px 6px #44444444);
-    opacity: 0.8;
   }
 }

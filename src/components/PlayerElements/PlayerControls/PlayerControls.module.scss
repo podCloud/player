@@ -1,8 +1,23 @@
 .controls {
   display: flex;
-  flex-direction: row;
-  width: 100%;
   align-items: center;
+  padding: 10px;
+  @media (max-width: 360px) {
+    justify-content: center;
+    padding-left: 52px;
+  }
+}
+
+.play_pause {
+  height: 40px !important;
+  margin: -5px 3px -3px;
+  &.pause {
+    svg {
+      height: 30px;
+      width: 30px;
+      margin: 5px;
+    }
+  }
 }
 
 @keyframes pulse {
@@ -23,6 +38,6 @@
 .pulse_animation {
   transition: opacity 0.5s, transform 0.5s;
   &.on {
-    animation: pulse 2s infinite ease-in-out;
+    animation: pulse 1s infinite ease-in-out;
   }
 }

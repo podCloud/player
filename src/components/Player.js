@@ -2,13 +2,14 @@ import React, { useState } from "react";
 
 import EpisodesList from "./EpisodesList";
 
-import EpisodeCover from "./EpisodeCover";
 import EpisodeTitle from "./EpisodeTitle";
 import PodcastTitle from "./PodcastTitle";
 
 import BackgroundCover from "./BackgroundCover";
 
 import MediaPlayer from "./MediaPlayer";
+
+import PodCloud from "./Icons/PodCloud";
 
 import styles from "./Player.module.scss";
 
@@ -29,15 +30,20 @@ const Player = ({
 
   return (
     <div className={styles.wrapper}>
-      <EpisodeCover currentEpisode={currentEpisode} large={true} />
+      {/* eslint-disable react/jsx-no-target-blank */}
+      <a
+        href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
+        target="_blank"
+        style={{ zIndex: 999999 }}
+      >
+        <PodCloud className={styles.podcloud_logo} noOutline={true} />
+      </a>
+      {/* eslint-enable react/jsx-no-target-blank */}
+      <MediaPlayer currentEpisode={currentEpisode} />
       <div className={styles.player}>
-        <MediaPlayer mediaUrl={currentEpisode.enclosure_url} />
         <div className={styles.head}>
-          <EpisodeCover currentEpisode={currentEpisode} />
-          <div className={styles.titles}>
-            <EpisodeTitle currentEpisode={currentEpisode} />
-            <PodcastTitle currentPodcast={currentPodcast} />
-          </div>
+          <EpisodeTitle currentEpisode={currentEpisode} />
+          <PodcastTitle currentPodcast={currentPodcast} />
         </div>
         <PlayerTimecodes initialDuration={currentEpisode.enclosure_duration} />
         <PlayerProgressBar />
@@ -58,6 +64,7 @@ const Player = ({
         <EpisodesList
           episodesList={episodesList}
           setCurrentEpisode={setCurrentEpisode}
+          className={styles.episodes_list}
           open={episodesListVisible}
         />
       ) : null}

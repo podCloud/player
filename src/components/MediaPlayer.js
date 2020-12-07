@@ -4,7 +4,13 @@ import playerStore from "../stores/player";
 
 import { useRecoilState } from "recoil";
 
-const MediaPlayer = ({ mediaUrl }) => {
+import classnames from "classnames";
+
+import styles from "./MediaPlayer.module.scss";
+
+import EpisodeCover from "./EpisodeCover";
+
+const MediaPlayer = ({ currentEpisode }) => {
   const player = useRef();
 
   const [playerState, setPlayerState] = useRecoilState(playerStore);
@@ -67,6 +73,15 @@ const MediaPlayer = ({ mediaUrl }) => {
             ref.playbackRate = ref.playbackRate + 0.25;
             if (ref.playbackRate > 2) ref.playbackRate = 0.25;
           },
+          toggleFullscreen: () => {
+            if (ref.requestFullscreen) {
+              ref.requestFullscreen();
+            } else if (ref.mozRequestFullScreen) {
+              ref.mozRequestFullScreen(); // Firefox
+            } else if (ref.webkitRequestFullscreen) {
+              ref.webkitRequestFullscreen(); // Chrome and Safari
+            }
+          },
         };
       });
 
@@ -109,6 +124,8 @@ const MediaPlayer = ({ mediaUrl }) => {
     }
   }, [ref, setPlayerState]);
 
+  const { enclosure_url: mediaUrl } = currentEpisode;
+
   useEffect(() => {
     if (ref && mediaUrl !== ref.src) {
       ref.src = mediaUrl;
@@ -126,7 +143,18 @@ const MediaPlayer = ({ mediaUrl }) => {
     }
   }, [ref, mediaUrl, playerState, setPlayerState]);
 
-  return <video ref={player} hidden preload={"none"} />;
+  const { hasVideo } = playerState;
+
+  return (
+    <>
+      <video
+        ref={player}
+        className={classnames(styles.player, { [styles.hidden]: !hasVideo })}
+        preload={"none"}
+      />
+      {hasVideo ? null : <EpisodeCover currentEpisode={currentEpisode} />}
+    </>
+  );
 };
 
 export default MediaPlayer;

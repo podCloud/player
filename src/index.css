@@ -3,26 +3,27 @@
 body {
   font-family: "Lato", Helvetica, Arial, sans-serif;
   background: transparent;
-  display: flex;
   margin: 0;
-  color: #FFF;
+  color: #333;
+  background: transparent;
 }
 
 #root {
-  margin: 0;
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 a,
 a:link,
 a:visited {
-  color: #FFF;
+  color: #333;
   text-decoration: none;
 }
 a:hover {
-  color: #dedede;
+  color: #111;
 }

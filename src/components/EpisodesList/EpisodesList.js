@@ -6,9 +6,11 @@ import classnames from "classnames";
 
 import styles from "./EpisodesList.module.scss";
 
-const EpisodesList = ({ episodesList, setCurrentEpisode, open }) => {
+const EpisodesList = ({ className, episodesList, setCurrentEpisode, open }) => {
   return Array.isArray(episodesList) && episodesList.length > 0 ? (
-    <div className={classnames(styles.list, { [styles.open]: open })}>
+    <div
+      className={classnames(className, styles.list, { [styles.open]: open })}
+    >
       {episodesList.map((ep) => (
         <EpisodesListItem
           key={ep._id}

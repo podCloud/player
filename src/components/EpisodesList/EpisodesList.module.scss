@@ -1,14 +1,5 @@
 .list {
-  overflow-y: auto;
-  background-color: #4a4a4a;
-
-  transition: width 0.4s ease-in-out;
-
-  height: 100vh;
-  width: 0vw;
-
   &.open {
-    width: 30vw;
     animation: hide-scroll 0.5s backwards;
 
     @keyframes hide-scroll {
@@ -16,16 +7,6 @@
       to {
         overflow: hidden;
       }
-    }
-  }
-
-  @media (max-aspect-ratio: 3/2) {
-    transition: height 0.4s ease-in-out;
-    width: 100vw;
-    height: 0;
-    &.open {
-      width: 100vw;
-      height: 40vh;
     }
   }
 }

@@ -1,8 +1,8 @@
 import React from "react";
 
-const PauseIcon = ({ fill = "#FFF", className }) => (
-  <svg fill={fill} className={className} viewBox="0 0 512 512">
-    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"></path>
+const PauseIcon = ({ color = "#FFF", className }) => (
+  <svg viewBox="0 0 24 24" fill={color} className={className}>
+    <path d="M10 3a1 1 0 011 1v16a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1h4zm8 0a1 1 0 011 1v16a1 1 0 01-1 1h-4a1 1 0 01-1-1V4a1 1 0 011-1h4z" />
   </svg>
 );
 

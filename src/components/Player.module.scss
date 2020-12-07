@@ -1,39 +1,74 @@
 .wrapper {
-  height: 100vh;
+  position: relative;
+  z-index: 0;
+  height: 100%;
   width: 100%;
+  min-height: 180px;
+  max-height: 180px;
+  max-width: 800px;
+
+  @media (max-width: 360px) {
+    max-width: 300px;
+    @media (min-height: 380px) {
+      min-height: 380px;
+      max-height: 380px;
+      flex-direction: column;
+    }
+  }
+
   display: flex;
-  flex-direction: row;
-  background-color: rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  @media (max-aspect-ratio: 3/2) {
-    flex-direction: column;
+  border-radius: 8px;
+  background-color: hsl(0deg, 0%, 40%);
+  color: #fbfbfb;
+  text-align: left;
+
+  a,
+  a:link,
+  a:visited {
+    color: #fbfbfb;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #dedede;
   }
 }
 
 .player {
-  max-width: 96vw;
-  max-height: 96vh;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
-  margin-left: 2vw;
-  margin-right: 2vw;
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.head {
-  flex-grow: 1;
-  display: flex;
-  @media (max-aspect-ratio: 3/2) {
-    flex-direction: column;
+  padding: 10px 14px;
+  min-width: 0;
+  @media (max-width: 360px) {
+    @media (min-height: 380px) {
+      padding: 0 14px;
+      flex-grow: 0;
+    }
   }
 }
 
-.titles {
-  margin-bottom: 4vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.podcloud_logo {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+  filter: grayscale(1);
+  transition: filter 0.1s, opacity 0.1s;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+}
+
+.head {
+  margin: 15px 15px 20px 0px;
+}
+
+.episodes_list {
+  display: none;
 }

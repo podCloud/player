@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
 
+import "./i18n";
+
 import PodcloudPlayer from "./Podcloud/PodcloudPlayer";
 
 import "./index.css";

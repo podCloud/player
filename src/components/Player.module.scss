@@ -9,9 +9,9 @@
 
   @media (max-width: 360px) {
     max-width: 300px;
-    @media (min-height: 400px) {
-      min-height: 400px;
-      max-height: 400px;
+    @media (min-height: 380px) {
+      min-height: 380px;
+      max-height: 380px;
       flex-direction: column;
     }
   }
@@ -39,7 +39,7 @@
   padding: 10px 14px;
   min-width: 0;
   @media (max-width: 360px) {
-    @media (min-height: 400px) {
+    @media (min-height: 380px) {
       padding: 0 14px;
       flex-grow: 0;
     }

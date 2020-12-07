@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 
 import classnames from "classnames";
 
-import styles from "./MediaPlayer.module.css";
+import styles from "./MediaPlayer.module.scss";
 
 import EpisodeCover from "./EpisodeCover";
 

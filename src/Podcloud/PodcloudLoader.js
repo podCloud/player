@@ -125,9 +125,16 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
     console.error("podcast episodes", podcastEpisodes.error, podcastEpisodes);
   }
 
+  const loading =
+    !episode.called ||
+    episode.loading ||
+    (!currentEpisode?._id && episode.data?.podcastItem?._id);
+
+  console.log({ loading, episode, currentEpisode });
+
   return episode.error ? (
     <p>{t("error_occured")}</p>
-  ) : episode.loading ? (
+  ) : loading ? (
     <p>{t("loading")}</p>
   ) : currentEpisode?._id ? (
     <PlayerComponent

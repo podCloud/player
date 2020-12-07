@@ -5,7 +5,10 @@ import { useTranslation } from "react-i18next";
 import styles from "./PodcastTitle.module.scss";
 
 const PodcastTitle = ({ currentPodcast }) => {
-  const { podcloud_url, title } = currentPodcast;
+  const {
+    platforms: { podcloud_url },
+    title,
+  } = currentPodcast;
   const { t } = useTranslation();
 
   const discover_on_podcloud = t("discover_on_podcloud", { title });

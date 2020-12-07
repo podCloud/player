@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useQuery, useLazyQuery, gql } from "@apollo/client";
+import { useLazyQuery, gql } from "@apollo/client";
 
 import { useTranslation } from "react-i18next";
 
@@ -141,7 +141,11 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
       <Trans i18nKey="unknown_episode">
         {/* eslint-disable react/jsx-no-target-blank */}
         {/* eslint-disable jsx-a11y/anchor-has-content */}
-        <a href="https://podcloud.fr" target="_blank" />
+        <a
+          href="https://podcloud.fr"
+          target="_blank"
+          style={{ borderBottom: "1px dashed #ccc", marginBottom: -1 }}
+        />
         {/* eslint-enable jsx-a11y/anchor-has-content */}
         {/* eslint-enable react/jsx-no-target-blank */}
       </Trans>

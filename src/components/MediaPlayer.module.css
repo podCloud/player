@@ -1,6 +1,17 @@
 .player {
   height: 100%;
   width: auto;
+  max-width: 230px;
+  background: black;
+
+  @media (max-width: 360px) {
+    @media (min-height: 400px) {
+      width: 100%;
+      height: auto;
+      flex-grow: 1;
+      max-height: 230px;
+    }
+  }
 }
 
 .hidden {

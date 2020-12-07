@@ -5,6 +5,8 @@ import { useRecoilState } from "recoil";
 
 import classnames from "classnames";
 
+import { useTranslation } from "react-i18next";
+
 import styles from "./PlayerControls.module.scss";
 
 import PlayerControl from "./PlayerControl";
@@ -19,6 +21,7 @@ import List from "../../Icons/List";
 
 const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
   const [playerState] = useRecoilState(playerStore);
+  const { t } = useTranslation();
 
   const {
     playing,
@@ -28,7 +31,9 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
     minus15,
     playPause,
     plus15,
+    hasVideo,
     togglePlaybackRate,
+    toggleFullscreen,
   } = playerState;
 
   const hasShowEpisodesListButtonFn =
@@ -36,32 +41,42 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
 
   return (
     <div className={styles.controls}>
-      <PlayerControl Icon={Prev} title="-15s" onClick={minus15} />
+      <PlayerControl Icon={Prev} title={t("minus15")} onClick={minus15} />
       <PlayerControl
         Icon={playing ? Pause : Play}
-        title={playing ? "Pause" : "Play"}
-        primary={true}
-        className={classnames(styles.pulse_animation, {
-          [styles.on]: !playing && (seeking || loading),
+        title={playing ? t("pause") : t("play")}
+        className={classnames(styles.play_pause, styles.pulse_animation, {
+          [styles.on]: seeking || loading,
+          [styles.pause]: playing,
         })}
         onClick={playPause}
       />
-      <PlayerControl Icon={Next} title="+15s" onClick={plus15} />
-      <PlayerControlSpacer />
+      <PlayerControl Icon={Next} title={t("plus15")} onClick={plus15} />
+      {hasVideo && (
+        <PlayerControl
+          Icon={() => <div>Plein écran</div>}
+          title={t("fullscreen")}
+          onClick={toggleFullscreen}
+        />
+      )}
       <PlayerControl
         Icon={PlaybackRate}
         rate={playbackRate}
+        title={t("change_speed")}
         onClick={togglePlaybackRate}
       />
       {episodesListLoading || hasShowEpisodesListButtonFn ? (
-        <PlayerControl
-          Icon={List}
-          title="Liste des épisodes"
-          className={classnames(styles.pulse_animation, {
-            [styles.on]: episodesListLoading,
-          })}
-          onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
-        />
+        <>
+          <PlayerControlSpacer />
+          <PlayerControl
+            Icon={List}
+            title={t("episodes_list")}
+            className={classnames(styles.pulse_animation, {
+              [styles.on]: episodesListLoading,
+            })}
+            onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
+          />
+        </>
       ) : null}
     </div>
   );

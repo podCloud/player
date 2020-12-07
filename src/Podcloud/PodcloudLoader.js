@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { useQuery, useLazyQuery, gql } from "@apollo/client";
 
+import { useTranslation } from "react-i18next";
+
+import { Trans } from "react-i18next";
+
 const GET_PODCAST_ITEM = gql`
   query episode($guid: String!) {
     podcastItem(_id: $guid) {
       _id
       title
-      url
+      podcloud_url
       ... on Episode {
         enclosure {
           duration
@@ -23,6 +27,9 @@ const GET_PODCAST_ITEM = gql`
         _id
         title
         website_url
+        platforms {
+          podcloud_url
+        }
       }
     }
   }
@@ -34,7 +41,7 @@ const GET_PODCAST_ITEMS = gql`
       items {
         _id
         title
-        url
+        podcloud_url
         ... on Episode {
           enclosure {
             duration
@@ -58,8 +65,8 @@ const podcloudItemToPlayerItem = (ep) => ({
   cover: ep.enclosure?.cover,
 });
 
-const PodcloudLoader = ({ guid, PlayerComponent }) => {
-  console.log("guid");
+const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
+  const { t } = useTranslation();
 
   const [currentEpisode, setCurrentEpisode] = useState();
   const [currentPodcast, setCurrentPodcast] = useState();
@@ -88,11 +95,11 @@ const PodcloudLoader = ({ guid, PlayerComponent }) => {
   }, [episode?.data, setCurrentEpisode, setCurrentPodcast]);
 
   useEffect(() => {
-    if (currentPodcast?._id) {
+    if (currentPodcast?._id && list === true) {
       console.log("loading episodes list");
       loadPodcastEpisodes();
     }
-  }, [currentPodcast?._id, loadPodcastEpisodes]);
+  }, [currentPodcast?._id, list, loadPodcastEpisodes]);
 
   console.log("rendering loader");
   console.log("currentEpisode", currentEpisode);
@@ -105,24 +112,32 @@ const PodcloudLoader = ({ guid, PlayerComponent }) => {
 
   console.log({ podcastEpisodes, episodesList });
 
+  if (episode?.error) {
+    console.error("episode error", episode.error, episode);
+  }
   if (podcastEpisodes?.error) {
-    console.error(podcastEpisodes.error, podcastEpisodes);
+    console.error("podcast episodes", podcastEpisodes.error, podcastEpisodes);
   }
 
-  const loading =
-    episode.loading || !currentEpisode?._id || !currentPodcast._id;
-
   return episode.error ? (
-    <pre>{JSON.stringify(episode.error, null, 3)}</pre>
-  ) : loading ? (
-    <>Loading...</>
-  ) : (
+    <>{t("error_occured")}</>
+  ) : episode.loading ? (
+    <>{t("loading")}</>
+  ) : currentEpisode?._id ? (
     <PlayerComponent
       currentEpisode={currentEpisode}
       currentPodcast={currentPodcast}
       episodesList={episodesList}
       setCurrentEpisode={setCurrentEpisode}
     />
+  ) : (
+    <Trans i18nKey="unknown_episode">
+      {/* eslint-disable react/jsx-no-target-blank */}
+      {/* eslint-disable jsx-a11y/anchor-has-content */}
+      <a href="https://podcloud.fr" target="_blank" />
+      {/* eslint-enable jsx-a11y/anchor-has-content */}
+      {/* eslint-enable react/jsx-no-target-blank */}
+    </Trans>
   );
 };
 

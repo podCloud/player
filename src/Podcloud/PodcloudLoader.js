@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useQuery, useLazyQuery, gql } from "@apollo/client";
+import { useLazyQuery, gql } from "@apollo/client";
 
 import { useTranslation } from "react-i18next";
 
@@ -71,9 +71,15 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   const [currentEpisode, setCurrentEpisode] = useState();
   const [currentPodcast, setCurrentPodcast] = useState();
 
-  const episode = useQuery(GET_PODCAST_ITEM, {
+  const [loadEpisode, episode] = useLazyQuery(GET_PODCAST_ITEM, {
     variables: { guid },
   });
+
+  useEffect(() => {
+    if (guid) {
+      loadEpisode();
+    }
+  }, [guid, loadEpisode]);
 
   const [loadPodcastEpisodes, podcastEpisodes] = useLazyQuery(
     GET_PODCAST_ITEMS,
@@ -120,9 +126,9 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   }
 
   return episode.error ? (
-    <>{t("error_occured")}</>
+    <p>{t("error_occured")}</p>
   ) : episode.loading ? (
-    <>{t("loading")}</>
+    <p>{t("loading")}</p>
   ) : currentEpisode?._id ? (
     <PlayerComponent
       currentEpisode={currentEpisode}
@@ -131,13 +137,19 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
       setCurrentEpisode={setCurrentEpisode}
     />
   ) : (
-    <Trans i18nKey="unknown_episode">
-      {/* eslint-disable react/jsx-no-target-blank */}
-      {/* eslint-disable jsx-a11y/anchor-has-content */}
-      <a href="https://podcloud.fr" target="_blank" />
-      {/* eslint-enable jsx-a11y/anchor-has-content */}
-      {/* eslint-enable react/jsx-no-target-blank */}
-    </Trans>
+    <p>
+      <Trans i18nKey="unknown_episode">
+        {/* eslint-disable react/jsx-no-target-blank */}
+        {/* eslint-disable jsx-a11y/anchor-has-content */}
+        <a
+          href="https://podcloud.fr"
+          target="_blank"
+          style={{ borderBottom: "1px dashed #ccc", marginBottom: -1 }}
+        />
+        {/* eslint-enable jsx-a11y/anchor-has-content */}
+        {/* eslint-enable react/jsx-no-target-blank */}
+      </Trans>
+    </p>
   );
 };
 

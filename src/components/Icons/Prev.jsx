@@ -25,7 +25,7 @@ const PrevIcon = ({ color = "#FFF", className }) => (
       />
       <path
         fill={color}
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M21.593 9.93L13.53 5.27 21.593.607z"
       />
       <path fill="none" d="M-6.467 9.854h42.834v22.551H-6.467z" />

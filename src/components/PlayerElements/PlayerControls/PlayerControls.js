@@ -65,16 +65,18 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
         title={t("change_speed")}
         onClick={togglePlaybackRate}
       />
-      <PlayerControlSpacer />
       {episodesListLoading || hasShowEpisodesListButtonFn ? (
-        <PlayerControl
-          Icon={List}
-          title={t("episodes_list")}
-          className={classnames(styles.pulse_animation, {
-            [styles.on]: episodesListLoading,
-          })}
-          onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
-        />
+        <>
+          <PlayerControlSpacer />
+          <PlayerControl
+            Icon={List}
+            title={t("episodes_list")}
+            className={classnames(styles.pulse_animation, {
+              [styles.on]: episodesListLoading,
+            })}
+            onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
+          />
+        </>
       ) : null}
     </div>
   );

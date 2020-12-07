@@ -10,7 +10,7 @@ const NextIcon = ({ color = "#FFF", className }) => (
     <clipPath id="a">
       <path d="M0 0h40v40H0V0z" />
     </clipPath>
-    <g clip-path="url(#a)">
+    <g clipPath="url(#a)">
       <path fill="none" d="M0 0h40v40H0z" />
       <path
         fill="none"

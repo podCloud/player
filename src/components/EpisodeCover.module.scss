@@ -4,7 +4,27 @@
     height: 100%;
   }
 
-  @media (max-width: 450px) {
-    display: none;
+  display: none;
+
+  @media (min-width: 451px) {
+    display: block;
+  }
+
+  @media (max-width: 360px) {
+    @media (min-height: 400px) {
+      display: block;
+      flex-grow: 1;
+      height: auto;
+      text-align: center;
+      padding-top: 20px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      img {
+        width: 68%;
+        height: auto;
+        align-self: center;
+      }
+    }
   }
 }

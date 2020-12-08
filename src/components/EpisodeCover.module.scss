@@ -10,18 +10,18 @@
     display: block;
   }
 
-  @media (max-width: 360px) {
-    @media (min-height: 380px) {
-      display: block;
+  @media (max-width: 450px) {
+    @media (min-height: 320px) {
       flex-grow: 1;
-      height: auto;
+      height: 48%;
       text-align: center;
       padding-top: 20px;
       box-sizing: border-box;
       display: flex;
       justify-content: center;
       img {
-        width: 64%;
+        max-width: 64%;
+        max-height: 100%;
         height: auto;
         align-self: center;
       }

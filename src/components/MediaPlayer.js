@@ -151,6 +151,7 @@ const MediaPlayer = ({ currentEpisode }) => {
         ref={player}
         className={classnames(styles.player, { [styles.hidden]: !hasVideo })}
         preload={"none"}
+        onClick={(e) => e.target.requestPictureInPicture()}
       />
       {hasVideo ? null : <EpisodeCover currentEpisode={currentEpisode} />}
     </>

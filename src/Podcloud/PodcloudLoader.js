@@ -126,25 +126,53 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   }
 
   const loading =
-    !episode.called ||
-    episode.loading ||
-    (!currentEpisode?._id && episode.data?.podcastItem?._id);
+    guid &&
+    (!episode.called ||
+      episode.loading ||
+      (!currentEpisode?._id && episode.data?.podcastItem?._id));
 
   console.log({ loading, episode, currentEpisode });
 
-  return episode.error ? (
-    <p>{t("error_occured")}</p>
-  ) : loading ? (
-    <p>{t("loading")}</p>
-  ) : currentEpisode?._id ? (
-    <PlayerComponent
-      currentEpisode={currentEpisode}
-      currentPodcast={currentPodcast}
-      episodesList={episodesList}
-      setCurrentEpisode={setCurrentEpisode}
-    />
-  ) : (
-    <p>
+  if (episode.error) {
+    return <p>{t("error_occured")}</p>;
+  }
+
+  if (loading) {
+    return <p>{t("loading")}</p>;
+  }
+
+  if (currentEpisode?._id) {
+    debugger;
+    if (currentEpisode.enclosure_url) {
+      return (
+        <PlayerComponent
+          currentEpisode={currentEpisode}
+          currentPodcast={currentPodcast}
+          episodesList={episodesList}
+          setCurrentEpisode={setCurrentEpisode}
+        />
+      );
+    }
+
+    return (
+      <p style={{ textAlign: "center" }}>
+        <Trans i18nKey="unavailable_episode">
+          {/* eslint-disable react/jsx-no-target-blank */}
+          {/* eslint-disable jsx-a11y/anchor-has-content */}
+          <a
+            href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
+            target="_blank"
+            style={{ borderBottom: "1px dashed #ccc", marginBottom: -1 }}
+          />
+          {/* eslint-enable jsx-a11y/anchor-has-content */}
+          {/* eslint-enable react/jsx-no-target-blank */}
+        </Trans>
+      </p>
+    );
+  }
+
+  return (
+    <p style={{ textAlign: "center" }}>
       <Trans i18nKey="unknown_episode">
         {/* eslint-disable react/jsx-no-target-blank */}
         {/* eslint-disable jsx-a11y/anchor-has-content */}

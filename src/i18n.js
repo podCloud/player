@@ -11,7 +11,9 @@ const resources = {
       loading: "Loading...",
       error_occured: "An error occured. Please try again later.",
       unknown_episode:
-        "This episode does not exists.\u00A0<1>Discover more podcasts on podCloud</1>",
+        "This episode does not exists.\u00A0<0>Discover more podcasts on podCloud</0>",
+      unavailable_episode:
+        "This episode cannot be viewed in this player.\u00A0<0>View it on podCloud !</0>",
       minus15: "-15s",
       plus15: "+15s",
       play: "Play",
@@ -31,6 +33,8 @@ const resources = {
       error_occured: "Une erreur est survenue. Merci de réessayer plus tard.",
       unknown_episode:
         "Cet épisode n'existe pas.\u00A0<0>Découvrez plus de podcasts sur podCloud.</0>",
+      unavailable_episode:
+        "Cet épisode n'est pas disponible dans ce lecteur.\u00A0<0>Retrouvez le sur podCloud !</0>",
       play: "Lecture",
       resume: "Reprendre",
       pause: "Pause",

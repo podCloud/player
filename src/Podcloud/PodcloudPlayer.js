@@ -14,9 +14,10 @@ const getWidth = () =>
 const PodcloudPlayer = () => {
   // get guid or feed_id from url
 
-  let guid = (document.location.pathname.match(/guid\/([\w\d]+)/) || [])[1];
-  const list = document.location.pathname.includes("list/true");
+  const list = document.location.hash.includes("list");
+  const fixedSize = document.location.hash.includes("fixed-size");
 
+  let guid = (document.location.hash.match(/guid:([\w\d]+)/) || [])[1];
   if (!guid) {
     const meta = document.querySelector("meta[property='podcloud:item_id']");
     if (meta) {
@@ -25,6 +26,11 @@ const PodcloudPlayer = () => {
   }
 
   useEffect(() => {
+    if (fixedSize) {
+      console.log("fixed size");
+      return;
+    }
+
     const resizeListener = debounce(() => {
       const message = { setMyHeight: getWidth() > 450 ? 180 : 425 };
 
@@ -38,7 +44,7 @@ const PodcloudPlayer = () => {
     return () => {
       window.removeEventListener("resize", resizeListener);
     };
-  }, []);
+  }, [fixedSize]);
 
   return (
     <PodcloudProvider>

@@ -142,7 +142,6 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   }
 
   if (currentEpisode?._id) {
-    debugger;
     if (currentEpisode.enclosure_url) {
       return (
         <PlayerComponent

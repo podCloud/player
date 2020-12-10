@@ -14,16 +14,23 @@ const getWidth = () =>
 const PodcloudPlayer = () => {
   // get guid or feed_id from url
 
-  const list = document.location.hash.includes("list");
-  const fixedSize = document.location.hash.includes("fixed-size");
+  const path_components = document.location.pathname
+    .split("/")
+    .filter((a) => typeof a === "string" && a.trim().length);
+  const opts = path_components
+    .slice(path_components.lastIndexOf("player") + 1)
+    .reverse();
 
-  let guid = (document.location.hash.match(/guid:([\w\d]+)/) || [])[1];
-  if (!guid) {
-    const meta = document.querySelector("meta[property='podcloud:item_id']");
-    if (meta) {
-      guid = meta.content;
-    }
-  }
+  const list = opts.includes("list");
+  const fixedSize = opts.includes("fixed-size");
+
+  const guid_match = opts
+    .map((a) => a.match(/guid:([\w\d]+)/))
+    .filter(Array.isArray)[0];
+
+  const guid_meta = document.querySelector("meta[property='podcloud:item_id']");
+
+  const guid = guid_match ? guid_match[1] : guid_meta?.content;
 
   useEffect(() => {
     if (fixedSize) {

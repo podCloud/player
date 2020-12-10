@@ -39,7 +39,7 @@ const PodcloudPlayer = () => {
     }
 
     const resizeListener = debounce(() => {
-      const message = { setMyHeight: getWidth() > 450 ? 180 : 425 };
+      const message = { setMyHeight: getWidth() > 575 ? 200 : 420 };
 
       console.log(message);
       window.parent.postMessage(message, "*");

@@ -11,26 +11,58 @@ const getWidth = () =>
   document.documentElement.clientWidth ||
   document.body.clientWidth;
 
-const PodcloudPlayer = () => {
-  // get guid or feed_id from url
+const parseOptVal = (val) => {
+  // undefined means something like "list", so we infer list:true
+  if (typeof val === "undefined") return true;
 
-  const path_components = document.location.pathname
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (trimmed === "false") {
+      return false;
+    }
+    if (trimmed === "true") {
+      return true;
+    }
+    return trimmed;
+  }
+
+  return val;
+};
+
+const parseOpts = (str) =>
+  str
     .split("/")
-    .filter((a) => typeof a === "string" && a.trim().length);
-  const opts = path_components
-    .slice(path_components.lastIndexOf("player") + 1)
-    .reverse();
+    .filter((a) => typeof a === "string" && a.trim().length)
+    .map((a) => a.split(";"))
+    .flat()
+    .filter((a) => typeof a === "string" && a.trim().length)
+    .reduce((opts, opt) => {
+      const [key, val] = opt.split(":");
+      console.log({ key, val });
 
-  const list = opts.includes("list");
-  const fixedSize = opts.includes("fixed-size");
+      opts[key] = parseOptVal(val);
 
-  const guid_match = opts
-    .map((a) => a.match(/guid:([\w\d]+)/))
-    .filter(Array.isArray)[0];
+      return opts;
+    }, {});
 
-  const guid_meta = document.querySelector("meta[property='podcloud:item_id']");
+const DEFAULT_OPTS = { list: false, fixedSize: false };
 
-  const guid = guid_match ? guid_match[1] : guid_meta?.content;
+const PodcloudPlayer = () => {
+  const opts = Object.assign(
+    DEFAULT_OPTS,
+    ...[
+      document.querySelector("meta[property='podcloud:player']")?.content || "",
+      document.location.pathname.substring(
+        document.location.pathname.lastIndexOf("player")
+      ),
+    ].map(parseOpts)
+  );
+
+  console.log({ player_options: opts });
+
+  const list = opts.list;
+  const fixedSize = opts.fixedSize;
+  const guid = opts.guid;
 
   useEffect(() => {
     if (fixedSize) {

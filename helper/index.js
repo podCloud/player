@@ -1,7 +1,7 @@
 window.addEventListener(
   "message",
   (event) => {
-    const data = JSON.parse(`${event?.data}`);
+    const data = JSON.parse(`${event?.data?.["trim"]?.()}`);
     if (data?.height) {
       Array.prototype.forEach.call(
         document.getElementsByTagName("iframe"),

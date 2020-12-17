@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   mode: "production",
-  entry: "./src/helper.js",
+  entry: "./index.js",
   output: {
     filename: "helper.js",
     path: path.resolve(__dirname, "build"),

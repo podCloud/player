@@ -1,0 +1,1 @@
+window.addEventListener("message",(function(e){var t=JSON.parse("".concat(null==e?void 0:e.data));null!=t&&t.height&&Array.prototype.forEach.call(document.getElementsByTagName("iframe"),(function(n){n.contentWindow===e.source&&(n.style.transition="height 0.2s ease-in-out",n.style.height="".concat(t.height,"px"))}))}),!1);

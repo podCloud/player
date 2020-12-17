@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { resizeFrame, isPlayerPortrait } from "../utils";
+
 import EpisodesList from "./EpisodesList";
 
 import EpisodeTitle from "./EpisodeTitle";
@@ -31,11 +33,6 @@ const Player = ({
   const hasEpisodes = episodesList?.length > 0;
   const showEpisodesListBtn = episodesList?.loading || hasEpisodes;
 
-  const isPlayerPortrait = () =>
-    `${getComputedStyle(document.documentElement).getPropertyValue(
-      "--player-mode"
-    )}`.trim() === "portrait";
-
   useEffect(() => {
     if (episodesListOpened && hasEpisodes) {
       if (!isPlayerPortrait()) {
@@ -44,11 +41,18 @@ const Player = ({
     }
   }, [episodesListOpened, hasEpisodes]);
 
+  const showHideEpisodesList = (open) => {
+    resizeFrame(open);
+    window.setTimeout(() => setEpisodesListVisible(open), 150);
+    window.setTimeout(() => resizeFrame(open), 1000);
+  };
+
   return (
     <div
       className={classnames(styles.wrapper, {
         [styles.episode_list_opened]: episodesListVisible,
       })}
+      player-wrapper="true"
     >
       <div className={styles.all_player}>
         {/* eslint-disable react/jsx-no-target-blank */}
@@ -75,9 +79,7 @@ const Player = ({
             showEpisodesListButtonFn={
               showEpisodesListBtn
                 ? () => {
-                    setEpisodesListVisible((current) => {
-                      return !current;
-                    });
+                    showHideEpisodesList(!episodesListVisible);
                   }
                 : null
             }
@@ -90,11 +92,11 @@ const Player = ({
           setCurrentEpisode={(...args) => {
             setCurrentEpisode(...args);
             if (isPlayerPortrait()) {
-              setEpisodesListVisible(false);
+              showHideEpisodesList(false);
             }
           }}
           open={episodesListVisible}
-          closeFn={() => setEpisodesListVisible(false)}
+          closeFn={() => showHideEpisodesList(false)}
         />
       ) : null}
       <BackgroundCover currentEpisode={currentEpisode} />

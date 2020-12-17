@@ -1,31 +1,41 @@
+@import "../../base.scss";
+
 .list {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   width: 100%;
-  height: 180px;
-  z-index: 2000;
+  height: $list-height;
+  z-index: 3000;
   transition: top 0.2s ease-in-out;
+  padding-bottom: 5px;
+
+  padding-top: 40px;
+
+  .header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 40px;
+  }
 
   &.open {
     top: 0;
   }
 
-  @media (max-width: 575px) {
-    @media (min-height: 320px) {
-      width: 0;
-      height: 100%;
-      &.open {
-        width: 320px;
-      }
-    }
+  @include portrait {
+    height: auto;
+    bottom: 0;
+    padding-bottom: 0;
   }
 
-  @media (min-height: 360px) {
+  @include horizontal-with-list {
     position: relative;
     top: 0;
     z-index: 0;
+    padding-top: 5px;
 
     .header {
       display: none;

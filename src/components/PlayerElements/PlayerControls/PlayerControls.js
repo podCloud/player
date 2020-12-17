@@ -10,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import styles from "./PlayerControls.module.scss";
 
 import PlayerControl from "./PlayerControl";
-import PlayerControlSpacer from "./PlayerControlSpacer";
 
 import Play from "../../Icons/Play";
 import Pause from "../../Icons/Pause";
@@ -67,17 +66,18 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
         onClick={togglePlaybackRate}
       />
       {episodesListLoading || hasShowEpisodesListButtonFn ? (
-        <>
-          <PlayerControlSpacer />
-          <PlayerControl
-            Icon={List}
-            title={t("episodes_list")}
-            className={classnames(styles.pulse_animation, {
+        <PlayerControl
+          Icon={List}
+          title={t("episodes_list")}
+          className={classnames(
+            styles.episodes_list_button,
+            styles.pulse_animation,
+            {
               [styles.on]: episodesListLoading,
-            })}
-            onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
-          />
-        </>
+            }
+          )}
+          onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}
+        />
       ) : null}
     </div>
   );

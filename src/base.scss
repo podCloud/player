@@ -1,0 +1,50 @@
+// By default horizontal
+// We switch to portrait mode if
+//
+// viewport height > minimum
+// viewport width < maximum
+// no list opened
+//
+
+$horizontal-mode-height: 180px;
+$list-height: 200px;
+$horizontal-with-list: $horizontal-mode-height + $list-height;
+
+$portrait-mode-minimal-height: 320px;
+$portrait-mode-maximal-width: 575px;
+
+@mixin portrait {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (min-height: $portrait-mode-minimal-height) {
+      @media (max-width: $portrait-mode-maximal-width) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin narrow-horizontal {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (max-height: $portrait-mode-minimal-height - 1px) {
+      @media (max-width: $portrait-mode-maximal-width) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin horizontal-with-list {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (min-height: $horizontal-with-list) {
+      @media (min-width: $portrait-mode-maximal-width + 1px) {
+        @content;
+      }
+    }
+  }
+}

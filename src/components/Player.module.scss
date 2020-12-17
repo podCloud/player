@@ -1,51 +1,52 @@
+@import "../base.scss";
+
 .wrapper {
   position: relative;
   z-index: 0;
   height: 100%;
   width: 100%;
-  height: 180px;
-  height: 180px;
+  height: $horizontal-mode-height;
   max-width: 1200px;
-  transition: height 0.2s ease-in-out, width 0.2s ease-in-out;
+  flex-direction: column;
 
   .all_player {
     display: flex;
-    height: 180px;
+    height: $horizontal-mode-height;
     width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0px 10px 20px 0px black;
     z-index: 1;
   }
 
-  @media (min-height: 360px) {
+  @include horizontal-with-list {
+    transition: height 0.2s ease-in-out;
     &.episode_list_opened {
-      height: 360px;
-      .all_player {
-      }
+      height: $horizontal-with-list;
     }
   }
 
-  flex-direction: column;
+  @at-root :root {
+    --player-mode: horizontal;
+  }
 
-  @media (max-width: 575px) {
-    @media (min-height: 320px) {
-      width: 320px;
-      min-height: 320px;
-      max-height: 400px;
-      flex-direction: row;
+  @include portrait {
+    @at-root :root {
+      --player-mode: portrait;
+    }
 
-      .all_player {
-        width: 320px;
-        height: 100%;
-        box-shadow: 10px 0px 20px 0px black;
-        flex-direction: column;
-        justify-content: space-between;
-      }
+    min-width: 250px;
+    max-width: 320px;
+    min-height: 320px;
+    max-height: 400px;
+    height: 100%;
 
-      &.episode_list_opened {
-        width: 550px;
-        height: initial;
-        max-height: 400px;
-      }
+    flex-direction: row;
+
+    .all_player {
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 
@@ -71,12 +72,9 @@
   flex-grow: 1;
   padding: 10px 14px;
   min-width: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  @media (max-width: 575px) {
-    @media (min-height: 320px) {
-      padding: 0 14px;
-      flex-grow: 0;
-    }
+  @include portrait {
+    padding: 0 14px;
+    flex-grow: 0;
   }
 }
 

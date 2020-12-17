@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import EpisodesList from "./EpisodesList";
 
@@ -24,10 +24,25 @@ const Player = ({
   currentEpisode,
   currentPodcast,
   episodesList,
+  episodesListOpened,
   setCurrentEpisode,
 }) => {
   const [episodesListVisible, setEpisodesListVisible] = useState(false);
-  const showEpisodesList = episodesList?.loading || episodesList?.length > 0;
+  const hasEpisodes = episodesList?.length > 0;
+  const showEpisodesListBtn = episodesList?.loading || hasEpisodes;
+
+  const isPlayerPortrait = () =>
+    `${getComputedStyle(document.documentElement).getPropertyValue(
+      "--player-mode"
+    )}`.trim() === "portrait";
+
+  useEffect(() => {
+    if (episodesListOpened && hasEpisodes) {
+      if (!isPlayerPortrait()) {
+        setEpisodesListVisible(true);
+      }
+    }
+  }, [episodesListOpened, hasEpisodes]);
 
   return (
     <div
@@ -36,41 +51,48 @@ const Player = ({
       })}
     >
       <div className={styles.all_player}>
-          {/* eslint-disable react/jsx-no-target-blank */}
-          <a
-            href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
-            target="_blank"
-            style={{ zIndex: 1000 }}
-          >
-            <PodCloud className={styles.podcloud_logo} noOutline={true} />
-          </a>
-          {/* eslint-enable react/jsx-no-target-blank */}
-          <MediaPlayer currentEpisode={currentEpisode} />
-          <div className={styles.player}>
-            <div className={styles.head}>
-              <EpisodeTitle currentEpisode={currentEpisode} />
-              <PodcastTitle currentPodcast={currentPodcast} />
-            </div>
-            <PlayerTimecodes initialDuration={currentEpisode.enclosure_duration} />
-            <PlayerProgressBar />
-            <PlayerControls
-              episodesListLoading={episodesList?.loading}
-              showEpisodesListButtonFn={
-                showEpisodesList
-                  ? () => {
-                      setEpisodesListVisible((current) => {
-                        return !current;
-                      });
-                    }
-                  : null
-              }
-            />
+        {/* eslint-disable react/jsx-no-target-blank */}
+        <a
+          href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
+          target="_blank"
+          style={{ zIndex: 1000 }}
+        >
+          <PodCloud className={styles.podcloud_logo} noOutline={true} />
+        </a>
+        {/* eslint-enable react/jsx-no-target-blank */}
+        <MediaPlayer currentEpisode={currentEpisode} />
+        <div className={styles.player}>
+          <div className={styles.head}>
+            <EpisodeTitle currentEpisode={currentEpisode} />
+            <PodcastTitle currentPodcast={currentPodcast} />
           </div>
+          <PlayerTimecodes
+            initialDuration={currentEpisode.enclosure_duration}
+          />
+          <PlayerProgressBar />
+          <PlayerControls
+            episodesListLoading={episodesList?.loading}
+            showEpisodesListButtonFn={
+              showEpisodesListBtn
+                ? () => {
+                    setEpisodesListVisible((current) => {
+                      return !current;
+                    });
+                  }
+                : null
+            }
+          />
+        </div>
       </div>
-      {showEpisodesList ? (
+      {showEpisodesListBtn ? (
         <EpisodesList
           episodesList={episodesList}
-          setCurrentEpisode={setCurrentEpisode}
+          setCurrentEpisode={(...args) => {
+            setCurrentEpisode(...args);
+            if (isPlayerPortrait()) {
+              setEpisodesListVisible(false);
+            }
+          }}
           open={episodesListVisible}
           closeFn={() => setEpisodesListVisible(false)}
         />

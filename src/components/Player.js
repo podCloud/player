@@ -36,7 +36,7 @@ const Player = ({
   useEffect(() => {
     if (episodesListOpened && hasEpisodes) {
       if (!isPlayerPortrait()) {
-        setEpisodesListVisible(true);
+        showHideEpisodesList(true);
       }
     }
   }, [episodesListOpened, hasEpisodes]);
@@ -44,7 +44,7 @@ const Player = ({
   const showHideEpisodesList = (open) => {
     resizeFrame(open);
     window.setTimeout(() => setEpisodesListVisible(open), 150);
-    window.setTimeout(() => resizeFrame(open), 1000);
+    window.setTimeout(() => resizeFrame(open), 450);
   };
 
   return (

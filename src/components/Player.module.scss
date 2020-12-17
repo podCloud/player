@@ -23,9 +23,9 @@
     z-index: 1;
   }
 
-  &.episode_list_opened {
-    :root {
-      --best-viewport-height: #{$horizontal-with-list-best-height};
+  @include narrow-horizontal {
+    @at-root :root {
+      --best-viewport-height: #{$portrait-best-height};
     }
   }
 
@@ -48,6 +48,7 @@
     @at-root :root {
       --player-mode: portrait;
       --best-viewport-height: #{$portrait-best-height};
+      --list-height: 0;
     }
 
     .all_player {

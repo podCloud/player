@@ -30,7 +30,7 @@
   }
 
   @include horizontal-with-list {
-    transition: height 0.2s ease-in-out;
+    transition: height var(--transition-speed) ease-in-out;
     &.episode_list_opened {
       height: $horizontal-mode-with-list;
     }

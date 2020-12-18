@@ -42,6 +42,23 @@ const PodcloudPlayer = () => {
     };
   }, [fixedSize]);
 
+  useEffect(() => {
+    const resetResizingToggle = debounce(() => {
+      document.documentElement.style.removeProperty("--transition-speed");
+    }, 200);
+
+    const addResizingToggle = () => {
+      document.documentElement.style.setProperty("--transition-speed", 0);
+      resetResizingToggle();
+    };
+
+    window.addEventListener("resize", addResizingToggle);
+
+    return () => {
+      window.removeEventListener("resize", addResizingToggle);
+    };
+  }, []);
+
   return (
     <PodcloudProvider>
       <PodcloudLoader guid={guid} list={list} PlayerComponent={Player} />

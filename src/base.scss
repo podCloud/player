@@ -23,6 +23,7 @@ $portrait-best-height: $portrait-mode-height + $viewport-v-margin;
 
 :root {
   --list-height: #{$list-height};
+  --transition-speed: 0.2s;
 }
 
 @mixin portrait {

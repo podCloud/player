@@ -8,7 +8,7 @@
   width: 100%;
   height: $list-height;
   z-index: 3000;
-  transition: top 0.2s ease-in-out;
+  transition: top var(--transition-speed) ease-in-out;
   padding-bottom: 5px;
 
   padding-top: 40px;
@@ -35,7 +35,7 @@
     position: relative;
     top: 0;
     z-index: 0;
-    padding-top: 5px;
+    padding-top: 0;
 
     .header {
       display: none;

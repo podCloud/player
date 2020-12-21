@@ -1,9 +1,10 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+import classnames from "classnames";
 
 import styles from "./EpisodesListItem.module.scss";
 
 import playerStore from "../../stores/player";
-import { useRecoilState } from "recoil";
 
 import { convertHMS } from "../../utils";
 
@@ -11,6 +12,7 @@ import { useTranslation } from "react-i18next";
 
 import PlayIcon from "../Icons/Play";
 import PauseIcon from "../Icons/Pause";
+import PlayingIcon from "../Icons/Playing";
 
 const EpisodesListItem = ({ episode, setCurrentEpisode }) => {
   const { t } = useTranslation();
@@ -29,25 +31,50 @@ const EpisodesListItem = ({ episode, setCurrentEpisode }) => {
     }
   }
 
-  return (
-    <div className={styles.episode}>
-      <div
-        className={styles.button}
-        onClick={playPauseMe}
-        aria-label={currently_me && playing ? t("pause") : t("resume")}
-      >
-        {currently_me && playing ? <PauseIcon /> : <PlayIcon />}
+  return episode.enclosure_url ? (
+    <div
+      className={classnames(styles.episode, {
+        [styles.playing]: currently_me && playing,
+      })}
+      onClick={playPauseMe}
+    >
+      <div className={styles.cover_wrapper}>
+        <img
+          src={episode.cover.small_url}
+          alt={episode.title}
+          className={styles.cover}
+        />
+        {currently_me && playing ? (
+          <div className={styles.currently_playing}>
+            <PlayingIcon />
+          </div>
+        ) : null}
+        <div
+          className={styles.button}
+          aria-label={
+            currently_me && playing
+              ? t("pause")
+              : currently_me
+              ? t("resume")
+              : t("play")
+          }
+        >
+          {currently_me && playing ? <PauseIcon /> : <PlayIcon />}
+        </div>
       </div>
-      {/* eslint-disable react/jsx-no-target-blank */}
-      <a href={episode.podcloud_url} target="_blank" className={styles.title}>
-        {episode.title}
-      </a>
-      {/* eslint-enable react/jsx-no-target-blank */}
-      <div className={styles.duration}>
-        {convertHMS(episode.enclosure_duration)}
+      <div className={styles.infos}>
+        <div className={styles.title}>{episode.title}</div>
+        <div className={styles.meta}>
+          <div className={styles.published}>
+            {episode.published_at.toLocaleDateString()}
+          </div>
+          <div className={styles.duration}>
+            {convertHMS(episode.enclosure_duration)}
+          </div>
+        </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default EpisodesListItem;

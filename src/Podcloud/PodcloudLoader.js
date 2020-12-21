@@ -12,6 +12,7 @@ const GET_PODCAST_ITEM = gql`
       _id
       title
       podcloud_url
+      published_at
       ... on Episode {
         enclosure {
           duration
@@ -19,7 +20,6 @@ const GET_PODCAST_ITEM = gql`
           cover {
             small_url
             medium_url
-            big_url
           }
         }
       }
@@ -42,6 +42,7 @@ const GET_PODCAST_ITEMS = gql`
         _id
         title
         podcloud_url
+        published_at
         ... on Episode {
           enclosure {
             duration
@@ -49,7 +50,6 @@ const GET_PODCAST_ITEMS = gql`
             cover {
               small_url
               medium_url
-              big_url
             }
           }
         }
@@ -60,6 +60,7 @@ const GET_PODCAST_ITEMS = gql`
 
 const podcloudItemToPlayerItem = (ep) => ({
   ...ep,
+  published_at: new Date(ep.published_at),
   enclosure_url: ep.enclosure?.url,
   enclosure_duration: ep.enclosure?.duration,
   cover: ep.enclosure?.cover,
@@ -101,7 +102,7 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
   }, [episode?.data, setCurrentEpisode, setCurrentPodcast]);
 
   useEffect(() => {
-    if (currentPodcast?._id && list === true) {
+    if (currentPodcast?._id && (list === true || list === "opened")) {
       console.log("loading episodes list");
       loadPodcastEpisodes();
     }
@@ -148,6 +149,7 @@ const PodcloudLoader = ({ guid, list, PlayerComponent }) => {
           currentEpisode={currentEpisode}
           currentPodcast={currentPodcast}
           episodesList={episodesList}
+          episodesListOpened={list === "opened"}
           setCurrentEpisode={setCurrentEpisode}
         />
       );

@@ -6,52 +6,58 @@ import Player from "../components/Player";
 
 import { debounce } from "debounce";
 
-const getWidth = () =>
-  window.innerWidth ||
-  document.documentElement.clientWidth ||
-  document.body.clientWidth;
+import { resizeFrame, parseOpts } from "../utils.js";
+
+const DEFAULT_OPTS = { list: false, fixedSize: false };
 
 const PodcloudPlayer = () => {
-  // get guid or feed_id from url
+  const opts = Object.assign(
+    DEFAULT_OPTS,
+    ...[
+      document.querySelector("meta[property='podcloud:player']")?.content || "",
+      document.location.pathname.substring(
+        document.location.pathname.lastIndexOf("player")
+      ),
+    ].map(parseOpts)
+  );
 
-  const path_components = document.location.pathname
-    .split("/")
-    .filter((a) => typeof a === "string" && a.trim().length);
-  const opts = path_components
-    .slice(path_components.lastIndexOf("player") + 1)
-    .reverse();
+  console.log({ player_options: opts });
 
-  const list = opts.includes("list");
-  const fixedSize = opts.includes("fixed-size");
-
-  const guid_match = opts
-    .map((a) => a.match(/guid:([\w\d]+)/))
-    .filter(Array.isArray)[0];
-
-  const guid_meta = document.querySelector("meta[property='podcloud:item_id']");
-
-  const guid = guid_match ? guid_match[1] : guid_meta?.content;
+  const list = opts.list;
+  const fixedSize = opts.fixedSize;
+  const guid = opts.guid;
 
   useEffect(() => {
+    resizeFrame();
+
     if (fixedSize) {
-      console.log("fixed size");
-      return;
+      return console.log("Resize event not binded. Fixed size mode");
     }
 
-    const resizeListener = debounce(() => {
-      const message = { setMyHeight: getWidth() > 575 ? 200 : 420 };
-
-      console.log(message);
-      window.parent.postMessage(message, "*");
-    }, 120);
-
+    const resizeListener = debounce(() => resizeFrame(), 120);
     window.addEventListener("resize", resizeListener);
-    resizeListener();
 
     return () => {
       window.removeEventListener("resize", resizeListener);
     };
   }, [fixedSize]);
+
+  useEffect(() => {
+    const resetResizingToggle = debounce(() => {
+      document.documentElement.style.removeProperty("--transition-speed");
+    }, 200);
+
+    const addResizingToggle = () => {
+      document.documentElement.style.setProperty("--transition-speed", 0);
+      resetResizingToggle();
+    };
+
+    window.addEventListener("resize", addResizingToggle);
+
+    return () => {
+      window.removeEventListener("resize", addResizingToggle);
+    };
+  }, []);
 
   return (
     <PodcloudProvider>

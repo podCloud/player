@@ -1,0 +1,63 @@
+// By default horizontal
+// We switch to portrait mode if
+//
+// viewport height > minimum
+// viewport width < maximum
+// no list opened
+//
+
+$horizontal-mode-height: 180px;
+$list-height: 200px;
+$horizontal-mode-with-list: $horizontal-mode-height + $list-height;
+
+$viewport-v-margin: 20px;
+
+$portrait-mode-height: 400px;
+$portrait-mode-minimal-height: 320px;
+$portrait-mode-maximal-width: 575px;
+
+$horizontal-best-height: $horizontal-mode-height + $viewport-v-margin;
+$horizontal-with-list-best-height: $horizontal-mode-with-list +
+  $viewport-v-margin;
+$portrait-best-height: $portrait-mode-height + $viewport-v-margin;
+
+:root {
+  --list-height: #{$list-height};
+  --transition-speed: 0.2s;
+}
+
+@mixin portrait {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (max-width: $portrait-mode-maximal-width) {
+      @media (min-height: $portrait-mode-minimal-height) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin narrow-horizontal {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (max-height: $portrait-mode-minimal-height - 1px) {
+      @media (max-width: $portrait-mode-maximal-width) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin horizontal-with-list {
+  // Everything will collapse into 1 media query,
+  // it's only broken in three for readability
+  @media only screen {
+    @media (min-height: $horizontal-mode-with-list) {
+      @media (min-width: $portrait-mode-maximal-width + 1px) {
+        @content;
+      }
+    }
+  }
+}

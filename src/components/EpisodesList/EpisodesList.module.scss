@@ -1,12 +1,44 @@
-.list {
-  &.open {
-    animation: hide-scroll 0.5s backwards;
+@import "../../base.scss";
 
-    @keyframes hide-scroll {
-      from,
-      to {
-        overflow: hidden;
-      }
+.list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: $list-height;
+  z-index: 3000;
+  transition: top var(--transition-speed) ease-in-out;
+  padding-bottom: 5px;
+
+  padding-top: 40px;
+
+  .header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 40px;
+  }
+
+  &.open {
+    top: 0;
+  }
+
+  @include portrait {
+    height: auto;
+    bottom: 0;
+    padding-bottom: 0;
+  }
+
+  @include horizontal-with-list {
+    position: relative;
+    top: 0;
+    z-index: 0;
+    padding-top: 0;
+
+    .header {
+      display: none;
     }
   }
 }

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import { isInFrame, resizeFrame, isPlayerPortrait } from "../utils";
 
 import EpisodesList from "./EpisodesList";
 
@@ -11,6 +13,7 @@ import MediaPlayer from "./MediaPlayer";
 
 import PodCloud from "./Icons/PodCloud";
 
+import classnames from "classnames";
 import styles from "./Player.module.scss";
 
 import {
@@ -23,53 +26,85 @@ const Player = ({
   currentEpisode,
   currentPodcast,
   episodesList,
+  episodesListOpened,
   setCurrentEpisode,
 }) => {
   const [episodesListVisible, setEpisodesListVisible] = useState(false);
-  const showEpisodesList = episodesList?.loading || episodesList?.length > 0;
+  const hasEpisodes = episodesList?.length > 0;
+  const showEpisodesListBtn = episodesList?.loading || hasEpisodes;
+
+  useEffect(() => {
+    if (episodesListOpened && hasEpisodes) {
+      if (!isPlayerPortrait()) {
+        showHideEpisodesList(true);
+      }
+    }
+  }, [episodesListOpened, hasEpisodes]);
+
+  const showHideEpisodesList = (open) => {
+    resizeFrame(open);
+    window.setTimeout(() => setEpisodesListVisible(open), 150);
+    window.setTimeout(() => resizeFrame(open), 450);
+  };
 
   return (
-    <div className={styles.wrapper}>
-      {/* eslint-disable react/jsx-no-target-blank */}
-      <a
-        href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
-        target="_blank"
-        style={{ zIndex: 999999 }}
+    <>
+      <BackgroundCover currentEpisode={currentEpisode} fullpage={true} />
+      <div
+        className={classnames(styles.wrapper, {
+          [styles.episode_list_opened]: episodesListVisible,
+          [styles.standalone]: !isInFrame(),
+        })}
+        player-wrapper="true"
       >
-        <PodCloud className={styles.podcloud_logo} noOutline={true} />
-      </a>
-      {/* eslint-enable react/jsx-no-target-blank */}
-      <MediaPlayer currentEpisode={currentEpisode} />
-      <div className={styles.player}>
-        <div className={styles.head}>
-          <EpisodeTitle currentEpisode={currentEpisode} />
-          <PodcastTitle currentPodcast={currentPodcast} />
+        <div className={styles.all_player}>
+          {/* eslint-disable react/jsx-no-target-blank */}
+          <a
+            href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
+            target="_blank"
+            style={{ zIndex: 1000 }}
+          >
+            <PodCloud className={styles.podcloud_logo} noOutline={true} />
+          </a>
+          {/* eslint-enable react/jsx-no-target-blank */}
+          <MediaPlayer currentEpisode={currentEpisode} />
+          <div className={styles.player}>
+            <div className={styles.head}>
+              <EpisodeTitle currentEpisode={currentEpisode} />
+              <PodcastTitle currentPodcast={currentPodcast} />
+            </div>
+            <PlayerTimecodes
+              initialDuration={currentEpisode.enclosure_duration}
+            />
+            <PlayerProgressBar />
+            <PlayerControls
+              episodesListLoading={episodesList?.loading}
+              showEpisodesListButtonFn={
+                showEpisodesListBtn
+                  ? () => {
+                      showHideEpisodesList(!episodesListVisible);
+                    }
+                  : null
+              }
+            />
+          </div>
         </div>
-        <PlayerTimecodes initialDuration={currentEpisode.enclosure_duration} />
-        <PlayerProgressBar />
-        <PlayerControls
-          episodesListLoading={episodesList?.loading}
-          showEpisodesListButtonFn={
-            showEpisodesList
-              ? () => {
-                  setEpisodesListVisible((current) => {
-                    return !current;
-                  });
-                }
-              : null
-          }
-        />
+        {showEpisodesListBtn ? (
+          <EpisodesList
+            episodesList={episodesList}
+            setCurrentEpisode={(...args) => {
+              setCurrentEpisode(...args);
+              if (isPlayerPortrait()) {
+                showHideEpisodesList(false);
+              }
+            }}
+            open={episodesListVisible}
+            closeFn={() => showHideEpisodesList(false)}
+          />
+        ) : null}
+        <BackgroundCover currentEpisode={currentEpisode} />
       </div>
-      {showEpisodesList ? (
-        <EpisodesList
-          episodesList={episodesList}
-          setCurrentEpisode={setCurrentEpisode}
-          className={styles.episodes_list}
-          open={episodesListVisible}
-        />
-      ) : null}
-      <BackgroundCover currentEpisode={currentEpisode} />
-    </div>
+    </>
   );
 };
 

@@ -1,17 +1,59 @@
+@import "../base.scss";
+
 .wrapper {
   position: relative;
   z-index: 0;
   height: 100%;
   width: 100%;
-  min-height: 180px;
-  max-height: 180px;
+  height: $horizontal-mode-height;
   max-width: 1200px;
+  flex-direction: column;
 
-  @media (max-width: 575px) {
-    @media (min-height: 320px) {
-      max-width: 320px;
-      min-height: 320px;
-      max-height: 400px;
+  @at-root :root {
+    --player-mode: horizontal;
+    --best-viewport-height: #{$horizontal-best-height};
+  }
+
+  .all_player {
+    display: flex;
+    height: $horizontal-mode-height;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 10px 20px 0px black;
+    z-index: 1;
+  }
+
+  @include narrow-horizontal {
+    @at-root :root {
+      --best-viewport-height: #{$portrait-best-height};
+    }
+  }
+
+  @include horizontal-with-list {
+    transition: height var(--transition-speed) ease-in-out;
+    &.episode_list_opened {
+      height: $horizontal-mode-with-list;
+    }
+  }
+
+  @include portrait {
+    min-width: 250px;
+    max-width: 320px;
+    min-height: 320px;
+    max-height: 400px;
+    height: 100%;
+
+    flex-direction: row;
+
+    @at-root :root {
+      --player-mode: portrait;
+      --best-viewport-height: #{$portrait-best-height};
+      --list-height: 0;
+    }
+
+    .all_player {
+      width: 100%;
+      height: 100%;
       flex-direction: column;
       justify-content: space-between;
     }
@@ -39,12 +81,9 @@
   flex-grow: 1;
   padding: 10px 14px;
   min-width: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  @media (max-width: 575px) {
-    @media (min-height: 320px) {
-      padding: 0 14px;
-      flex-grow: 0;
-    }
+  @include portrait {
+    padding: 0 14px;
+    flex-grow: 0;
   }
 }
 
@@ -69,8 +108,4 @@
 
 .head {
   margin: 15px 15px 20px 0px;
-}
-
-.episodes_list {
-  display: none;
 }

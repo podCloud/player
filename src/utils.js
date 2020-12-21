@@ -1,4 +1,4 @@
-export function convertHMS(pSec) {
+export const convertHMS = (pSec) => {
   let nbSec = pSec;
   let sortie = {};
   sortie.heure = Math.trunc(nbSec / 3600);
@@ -27,4 +27,88 @@ export function convertHMS(pSec) {
     ":" +
     sortie.seconde
   );
-}
+};
+
+export const getBestViewportHeight = () =>
+  parseInt(
+    `${getComputedStyle(document.documentElement).getPropertyValue(
+      "--best-viewport-height"
+    )}`.trim(),
+    10
+  );
+
+export const getListHeight = () =>
+  parseInt(
+    `${getComputedStyle(document.documentElement).getPropertyValue(
+      "--list-height"
+    )}`.trim(),
+    10
+  );
+
+export const isPlayerPortrait = () =>
+  `${getComputedStyle(document.documentElement).getPropertyValue(
+    "--player-mode"
+  )}`.trim() === "portrait";
+
+export const isListOpened = () =>
+  `${getComputedStyle(document.documentElement).getPropertyValue(
+    "--list-opened"
+  )}`.trim() === "true";
+
+export const getActualPlayerHeight = () => {
+  const player = document.querySelector("[player-wrapper]")?.[0];
+  return player
+    ? window.getComputedStyle(player).getPropertyValue("height")
+    : 0;
+};
+
+export const resizeFrame = (forceListOpened) => {
+  const withList = isListOpened() || forceListOpened === true;
+  const listHeight = !isPlayerPortrait() && withList ? getListHeight() : 0;
+
+  const message = {
+    src: window.location.toString(),
+    context: "iframe.resize",
+    height: Math.max(
+      getActualPlayerHeight(),
+      getBestViewportHeight() + listHeight
+    ),
+  };
+
+  console.log("sending message", message);
+  window.parent.postMessage(JSON.stringify(message), "*");
+};
+
+const parseOptVal = (val) => {
+  // undefined means something like "list", so we infer list:true
+  if (typeof val === "undefined") return true;
+
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (trimmed === "false") {
+      return false;
+    }
+    if (trimmed === "true") {
+      return true;
+    }
+    return trimmed;
+  }
+
+  return val;
+};
+
+export const parseOpts = (str) =>
+  str
+    .split("/")
+    .filter((a) => typeof a === "string" && a.trim().length)
+    .map((a) => a.split(";"))
+    .flat()
+    .filter((a) => typeof a === "string" && a.trim().length)
+    .reduce((opts, opt) => {
+      const [key, val] = opt.split(":");
+      console.log({ key, val });
+
+      opts[key] = parseOptVal(val);
+
+      return opts;
+    }, {});

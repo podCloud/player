@@ -1,0 +1,29 @@
+{
+  "name": "podcloud-player-helper",
+  "version": "1.2.0",
+  "homepage": "https://podcloud.fr/",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {},
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "prettier": "^2.1.2",
+    "webpack": "^5.10.3",
+    "webpack-cli": "^4.2.0"
+  }
+}

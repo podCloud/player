@@ -1,40 +1,114 @@
+@import "../../base.scss";
+
 .episode {
   display: flex;
   flex-direction: row;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 8px;
+  padding-left: 0;
   align-items: center;
+  cursor: pointer;
 
-  &:nth-child(even) {
-    background-color: #4a4a4a;
+  .cover_wrapper {
+    $cover-size: 36px;
+
+    position: relative;
+    min-width: $cover-size;
+    width: $cover-size;
+    height: $cover-size;
+    margin: 5px 10px;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .button,
+    .currently_playing {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      background: hsla(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      svg {
+        width: 75%;
+        align-self: center;
+      }
+    }
+  }
+
+  $color-odd: #4a4a4a;
+  $color-even: #3d3d3d;
+
+  &:first-of-type {
+    padding-top: 15px;
+  }
+
+  &:last-of-type {
+    padding-bottom: 15px;
   }
 
   &:nth-child(odd) {
-    background-color: #3d3d3d;
+    background-color: $color-odd;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: lighten($color-odd, 10%);
+    }
   }
 
-  .button {
-    min-width: 25px;
-    margin-left: 10px;
-    margin-right: 10px;
-    cursor: pointer;
+  &:nth-child(even) {
+    background-color: $color-even;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: lighten($color-even, 10%);
+    }
+  }
+
+  &.playing {
+    .cover_wrapper {
+      .currently_playing {
+        opacity: 1;
+      }
+    }
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    .cover_wrapper {
+      .currently_playing {
+        opacity: 0;
+      }
+      .button {
+        opacity: 1;
+      }
+    }
   }
 }
 
-.title {
-  margin: 0px;
-  color: #dedede;
-  padding-right: 10px;
-}
+.infos {
+  flex-grow: 1;
+  font-size: 14px;
+  .title {
+    margin: 2px 0;
+  }
 
-.duration {
-  margin-left: auto;
-  margin-right: 5px;
-  margin-bottom: 0px;
-  margin-top: 0px;
-  color: #dedede;
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #ccc;
 
-  @media screen and (max-width: 490px) {
-    display: none;
+    .duration {
+      margin-left: auto;
+      margin-right: 5px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
   }
 }

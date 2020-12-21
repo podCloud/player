@@ -1,5 +1,6 @@
+@import "../base.scss";
+
 .cover {
-  background-color: rgba(0, 0, 0, 0.1);
   height: 100%;
   img {
     height: 100%;
@@ -7,22 +8,23 @@
 
   display: block;
 
-  @media (max-width: 575px) {
+  @include narrow-horizontal {
     display: none;
-    @media (min-height: 320px) {
-      flex-grow: 1;
-      height: 48%;
-      text-align: center;
-      padding-top: 20px;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: center;
-      img {
-        max-width: 64%;
-        max-height: 100%;
-        height: auto;
-        align-self: center;
-      }
+  }
+
+  @include portrait {
+    flex-grow: 1;
+    height: 48%;
+    text-align: center;
+    padding-top: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    img {
+      max-width: 64%;
+      max-height: 100%;
+      height: auto;
+      align-self: center;
     }
   }
 }

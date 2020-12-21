@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { resizeFrame, isPlayerPortrait } from "../utils";
+import { isInFrame, resizeFrame, isPlayerPortrait } from "../utils";
 
 import EpisodesList from "./EpisodesList";
 
@@ -48,59 +48,63 @@ const Player = ({
   };
 
   return (
-    <div
-      className={classnames(styles.wrapper, {
-        [styles.episode_list_opened]: episodesListVisible,
-      })}
-      player-wrapper="true"
-    >
-      <div className={styles.all_player}>
-        {/* eslint-disable react/jsx-no-target-blank */}
-        <a
-          href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
-          target="_blank"
-          style={{ zIndex: 1000 }}
-        >
-          <PodCloud className={styles.podcloud_logo} noOutline={true} />
-        </a>
-        {/* eslint-enable react/jsx-no-target-blank */}
-        <MediaPlayer currentEpisode={currentEpisode} />
-        <div className={styles.player}>
-          <div className={styles.head}>
-            <EpisodeTitle currentEpisode={currentEpisode} />
-            <PodcastTitle currentPodcast={currentPodcast} />
+    <>
+      <BackgroundCover currentEpisode={currentEpisode} fullpage={true} />
+      <div
+        className={classnames(styles.wrapper, {
+          [styles.episode_list_opened]: episodesListVisible,
+          [styles.standalone]: !isInFrame(),
+        })}
+        player-wrapper="true"
+      >
+        <div className={styles.all_player}>
+          {/* eslint-disable react/jsx-no-target-blank */}
+          <a
+            href={currentEpisode.podcloud_url ?? "https://podcloud.fr"}
+            target="_blank"
+            style={{ zIndex: 1000 }}
+          >
+            <PodCloud className={styles.podcloud_logo} noOutline={true} />
+          </a>
+          {/* eslint-enable react/jsx-no-target-blank */}
+          <MediaPlayer currentEpisode={currentEpisode} />
+          <div className={styles.player}>
+            <div className={styles.head}>
+              <EpisodeTitle currentEpisode={currentEpisode} />
+              <PodcastTitle currentPodcast={currentPodcast} />
+            </div>
+            <PlayerTimecodes
+              initialDuration={currentEpisode.enclosure_duration}
+            />
+            <PlayerProgressBar />
+            <PlayerControls
+              episodesListLoading={episodesList?.loading}
+              showEpisodesListButtonFn={
+                showEpisodesListBtn
+                  ? () => {
+                      showHideEpisodesList(!episodesListVisible);
+                    }
+                  : null
+              }
+            />
           </div>
-          <PlayerTimecodes
-            initialDuration={currentEpisode.enclosure_duration}
-          />
-          <PlayerProgressBar />
-          <PlayerControls
-            episodesListLoading={episodesList?.loading}
-            showEpisodesListButtonFn={
-              showEpisodesListBtn
-                ? () => {
-                    showHideEpisodesList(!episodesListVisible);
-                  }
-                : null
-            }
-          />
         </div>
+        {showEpisodesListBtn ? (
+          <EpisodesList
+            episodesList={episodesList}
+            setCurrentEpisode={(...args) => {
+              setCurrentEpisode(...args);
+              if (isPlayerPortrait()) {
+                showHideEpisodesList(false);
+              }
+            }}
+            open={episodesListVisible}
+            closeFn={() => showHideEpisodesList(false)}
+          />
+        ) : null}
+        <BackgroundCover currentEpisode={currentEpisode} />
       </div>
-      {showEpisodesListBtn ? (
-        <EpisodesList
-          episodesList={episodesList}
-          setCurrentEpisode={(...args) => {
-            setCurrentEpisode(...args);
-            if (isPlayerPortrait()) {
-              showHideEpisodesList(false);
-            }
-          }}
-          open={episodesListVisible}
-          closeFn={() => showHideEpisodesList(false)}
-        />
-      ) : null}
-      <BackgroundCover currentEpisode={currentEpisode} />
-    </div>
+    </>
   );
 };
 

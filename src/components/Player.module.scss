@@ -9,6 +9,10 @@
   max-width: 1200px;
   flex-direction: column;
 
+  &.standalone {
+    margin: 10px;
+  }
+
   @at-root :root {
     --player-mode: horizontal;
     --best-viewport-height: #{$horizontal-best-height};

@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 
 import classnames from "classnames";
 
-import "player.js";
+import playerjs from "player.js";
 
 import styles from "./MediaPlayer.module.scss";
 
@@ -21,7 +21,7 @@ const MediaPlayer = ({ currentEpisode }) => {
 
   useEffect(() => {
     if (ref && ref.dataset.boundEvents !== "did") {
-      window.playerjs?.HTML5Adapter?.(ref)?.ready?.();
+      playerjs.HTML5Adapter(ref).ready();
 
       ref.dataset.boundEvents = "did";
 

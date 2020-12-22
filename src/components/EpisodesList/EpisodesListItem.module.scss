@@ -43,8 +43,10 @@
   $color-odd: #4a4a4a;
   $color-even: #3d3d3d;
 
-  &:first-of-type {
-    padding-top: 15px;
+  @include horizontal-with-list {
+    &:first-of-type {
+      padding-top: 15px;
+    }
   }
 
   &:last-of-type {

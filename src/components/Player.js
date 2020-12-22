@@ -33,14 +33,6 @@ const Player = ({
   const hasEpisodes = episodesList?.length > 0;
   const showEpisodesListBtn = episodesList?.loading || hasEpisodes;
 
-  useEffect(() => {
-    if (episodesListOpened && hasEpisodes) {
-      if (!isPlayerPortrait()) {
-        showHideEpisodesList(true);
-      }
-    }
-  }, [episodesListOpened, hasEpisodes]);
-
   const showHideEpisodesList = (open) => {
     resizeFrame(open);
     window.setTimeout(() => setEpisodesListVisible(open), 150);
@@ -52,6 +44,7 @@ const Player = ({
       <BackgroundCover currentEpisode={currentEpisode} fullpage={true} />
       <div
         className={classnames(styles.wrapper, {
+          [styles.episode_list_keep_opened]: episodesListOpened,
           [styles.episode_list_opened]: episodesListVisible,
           [styles.standalone]: !isInFrame(),
         })}
@@ -79,6 +72,7 @@ const Player = ({
             <PlayerProgressBar />
             <PlayerControls
               episodesListLoading={episodesList?.loading}
+              episodesListOpened={episodesListOpened}
               showEpisodesListButtonFn={
                 showEpisodesListBtn
                   ? () => {
@@ -89,7 +83,7 @@ const Player = ({
             />
           </div>
         </div>
-        {showEpisodesListBtn ? (
+        {showEpisodesListBtn || episodesListOpened ? (
           <EpisodesList
             episodesList={episodesList}
             setCurrentEpisode={(...args) => {

@@ -19,7 +19,11 @@ import PlaybackRate from "../../Icons/PlaybackRate";
 import List from "../../Icons/List";
 import FullScreen from "../../Icons/FullScreen";
 
-const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
+const PlayerControls = ({
+  episodesListLoading,
+  showEpisodesListButtonFn,
+  episodesListOpened,
+}) => {
   const [playerState] = useRecoilState(playerStore);
   const { t } = useTranslation();
 
@@ -74,6 +78,7 @@ const PlayerControls = ({ episodesListLoading, showEpisodesListButtonFn }) => {
             styles.pulse_animation,
             {
               [styles.on]: episodesListLoading,
+              [styles.hide_on_horizontal]: episodesListOpened,
             }
           )}
           onClick={() => episodesListLoading ?? showEpisodesListButtonFn()}

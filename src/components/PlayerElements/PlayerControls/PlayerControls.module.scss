@@ -1,3 +1,5 @@
+@import "../../../base.scss";
+
 .controls {
   position: relative;
   display: flex;
@@ -47,4 +49,9 @@
   position: absolute;
   right: 5px;
   bottom: 15px;
+  &.hide_on_horizontal {
+    @include horizontal-with-list {
+      display: none;
+    }
+  }
 }

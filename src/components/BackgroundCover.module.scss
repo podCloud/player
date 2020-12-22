@@ -17,7 +17,7 @@
     width: 100vw;
     height: 100vh;
 
-    @media (max-height: $horizontal-mode-height + $viewport-v-margin) {
+    @media (max-height: $horizontal-mode-with-list + $viewport-v-margin + $viewport-v-margin) {
       display: none;
     }
 

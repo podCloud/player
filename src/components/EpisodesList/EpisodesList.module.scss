@@ -13,6 +13,8 @@
 
   padding-top: 40px;
 
+  background: #333;
+
   .header {
     position: absolute;
     top: 0;
@@ -39,6 +41,48 @@
 
     .header {
       display: none;
+    }
+
+    .loader {
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      line-height: 180px;
+      font-size: 60px;
+      &:before {
+        content: ".";
+        animation-name: loader;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        animation-fill-mode: both;
+
+        @keyframes loader {
+          0% {
+            opacity: 0.3;
+          }
+
+          25% {
+            content: "..";
+          }
+
+          50% {
+            opacity: 0.5;
+            content: "...";
+          }
+
+          75% {
+            content: "..";
+          }
+
+          100% {
+            opacity: 0.3;
+            content: ".";
+          }
+        }
+      }
     }
   }
 }

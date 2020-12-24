@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { isInFrame, resizeFrame, isPlayerPortrait } from "../utils";
 
@@ -93,6 +93,7 @@ const Player = ({
               }
             }}
             open={episodesListVisible}
+            keepOpened={episodesListOpened}
             closeFn={() => showHideEpisodesList(false)}
           />
         ) : null}

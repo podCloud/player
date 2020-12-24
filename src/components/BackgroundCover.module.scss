@@ -22,7 +22,7 @@
     }
 
     @include portrait {
-      @media (max-height: $portrait-mode-height + $viewport-v-margin) {
+      @media (max-height: $portrait-mode-height + $viewport-v-margin + $viewport-v-margin) {
         display: none;
       }
     }

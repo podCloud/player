@@ -1,3 +1,5 @@
+import { debounce } from "debounce";
+
 export const convertHMS = (pSec) => {
   let nbSec = pSec;
   let sortie = {};
@@ -70,7 +72,7 @@ export const getActualPlayerHeight = () => {
     : 0;
 };
 
-export const resizeFrame = (forceListOpened) => {
+export const resizeFrame = debounce((forceListOpened) => {
   const withList = isListOpened() || forceListOpened === true;
   const listHeight = isPlayerHorizontal() && withList ? getListHeight() : 0;
 
@@ -85,7 +87,7 @@ export const resizeFrame = (forceListOpened) => {
 
   console.log("sending message", message);
   window.parent.postMessage(JSON.stringify(message), "*");
-};
+}, 10);
 
 const parseOptVal = (val) => {
   // undefined means something like "list", so we infer list:true

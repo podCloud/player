@@ -28,8 +28,6 @@ const PodcloudPlayer = () => {
   const guid = opts.guid;
 
   useEffect(() => {
-    resizeFrame();
-
     if (fixedSize) {
       return console.log("Resize event not binded. Fixed size mode");
     }

@@ -39,6 +39,8 @@ const Player = ({
     window.setTimeout(() => resizeFrame(open), 450);
   };
 
+      resizeFrame();
+
   return (
     <>
       <BackgroundCover currentEpisode={currentEpisode} fullpage={true} />

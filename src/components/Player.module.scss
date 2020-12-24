@@ -16,6 +16,7 @@
 
   @at-root :root {
     --player-mode: horizontal;
+    --player-narrow: false;
     --best-viewport-height: #{$horizontal-best-height};
   }
 
@@ -31,6 +32,7 @@
   @include narrow-horizontal {
     @at-root :root {
       --best-viewport-height: #{$portrait-best-height};
+      --player-narrow: true;
     }
   }
 
@@ -53,6 +55,7 @@
 
     @at-root :root {
       --player-mode: portrait;
+      --player-narrow: false;
       --best-viewport-height: #{$portrait-best-height};
       --list-height: 0;
     }

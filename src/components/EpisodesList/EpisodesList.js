@@ -16,12 +16,15 @@ const EpisodesList = ({
   setCurrentEpisode,
   closeFn,
   open,
+  keepOpened,
 }) => {
   return (
     <div
       className={classnames(className, styles.list, { [styles.open]: open })}
     >
-      <style>:root {`{ --list-opened: ${open ? true : false}; }`}</style>
+      <style>
+        :root {`{ --list-opened: ${open || keepOpened ? true : false}; }`}
+      </style>
       <Header className={styles.header} closeFn={closeFn} />
       {episodesList?.loading ? (
         <div className={styles.loader}></div>

@@ -50,6 +50,14 @@ export const isPlayerPortrait = () =>
     "--player-mode"
   )}`.trim() === "portrait";
 
+export const isPlayerNarrow = () =>
+  `${getComputedStyle(document.documentElement).getPropertyValue(
+    "--player-narrow"
+  )}`.trim() === "true";
+
+export const isPlayerHorizontal = () =>
+  !isPlayerNarrow() && !isPlayerPortrait();
+
 export const isListOpened = () =>
   `${getComputedStyle(document.documentElement).getPropertyValue(
     "--list-opened"
@@ -64,7 +72,7 @@ export const getActualPlayerHeight = () => {
 
 export const resizeFrame = (forceListOpened) => {
   const withList = isListOpened() || forceListOpened === true;
-  const listHeight = !isPlayerPortrait() && withList ? getListHeight() : 0;
+  const listHeight = isPlayerHorizontal() && withList ? getListHeight() : 0;
 
   const message = {
     src: window.location.toString(),

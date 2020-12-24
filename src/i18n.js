@@ -22,6 +22,7 @@ const resources = {
       fullscreen: "Fullscreen",
       change_speed: "Change playback speed",
       episodes_list: "Toggle episodes list",
+      episodes_list_title: "Episodes list",
       episode_cover_title: "{{title}} episode cover",
       listen_on_podcloud: "Listen {{title}} on podCloud",
       discover_on_podcloud: "Discover {{title}} on podCloud",
@@ -41,6 +42,7 @@ const resources = {
       fullscreen: "Plein écran",
       change_speed: "Changer la vitesse de lecture",
       episodes_list: "Afficher ou masquer la liste d'épisodes",
+      episodes_list_title: "Liste des épisodes",
       episode_cover_title: "Pochette de {{title}}",
       listen_on_podcloud: "Écouter {{title}} sur podCloud",
       discover_on_podcloud: "Découvrir {{title}} sur podCloud",
@@ -56,7 +58,6 @@ i18n
   .init({
     resources,
     fallbackLng: "en",
-
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },

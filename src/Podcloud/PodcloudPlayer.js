@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 
 import PodcloudProvider from "./PodcloudProvider";
-import PodcloudLoader from "./PodcloudLoader";
-import Player from "../components/Player";
+
+import PodcloudPlaylistLoader from "./PodcloudPlaylistLoader";
+import PodcloudPodcastEpisodeLoader from "./PodcloudPodcastEpisodeLoader";
 
 import { debounce } from "debounce";
 
@@ -26,6 +27,9 @@ const PodcloudPlayer = () => {
   const list = opts.list;
   const fixedSize = opts.fixedSize;
   const guid = opts.guid;
+
+  const [user_id, pl_id] = `${opts.playlist}`.split("-");
+  const playlist_ids = user_id && pl_id ? { user_id, id: pl_id } : null;
 
   useEffect(() => {
     if (fixedSize) {
@@ -59,7 +63,11 @@ const PodcloudPlayer = () => {
 
   return (
     <PodcloudProvider>
-      <PodcloudLoader guid={guid} list={list} PlayerComponent={Player} />
+      {playlist_ids ? (
+        <PodcloudPlaylistLoader playlist_ids={playlist_ids} />
+      ) : (
+        <PodcloudPodcastEpisodeLoader guid={guid} list={list} />
+      )}
     </PodcloudProvider>
   );
 };

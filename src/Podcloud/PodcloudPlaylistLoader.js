@@ -44,10 +44,8 @@ const PodcloudPlaylistLoader = ({ playlist_ids, PlayerComponent }) => {
           const ep = epList[0];
           if (ep) {
             setEpisode(ep);
-            setLoading(false);
-          } else {
-            playlist.error = "No suitable episode in playlist";
           }
+          setLoading(false);
         }
       } else {
         setLoading(true);

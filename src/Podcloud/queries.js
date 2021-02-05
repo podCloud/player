@@ -10,7 +10,7 @@ export const GET_PODCAST_ITEM = gql`
       ... on Episode {
         enclosure {
           duration
-          url
+          url(purpose: "pl")
           cover {
             small_url
             medium_url
@@ -40,7 +40,7 @@ export const GET_PODCAST_ITEMS = gql`
         ... on Episode {
           enclosure {
             duration
-            url
+            url(purpose: "pl")
             cover {
               small_url
               medium_url
@@ -64,7 +64,7 @@ export const GET_PLAYLIST = gql`
         ... on Episode {
           enclosure {
             duration
-            url
+            url(purpose: "pl")
             cover {
               small_url
               medium_url

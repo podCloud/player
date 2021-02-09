@@ -128,11 +128,12 @@ const MediaPlayer = ({ currentEpisode }) => {
     }
   }, [ref, setPlayerState]);
 
-  const { enclosure_url: mediaUrl } = currentEpisode;
+  const { _id: episodeID, enclosure_url: mediaUrl } = currentEpisode;
 
   useEffect(() => {
-    if (ref && mediaUrl !== ref.src) {
+    if (ref && episodeID !== ref.dataset.episodeID) {
       ref.src = mediaUrl;
+      ref.dataset.episodeID = episodeID;
 
       if (playerState.should_autoplay) {
         ref.play().catch((error) => {
@@ -145,7 +146,7 @@ const MediaPlayer = ({ currentEpisode }) => {
         should_autoplay: true, // autoplay next tracks
       }));
     }
-  }, [ref, mediaUrl, playerState, setPlayerState]);
+  }, [ref, episodeID, mediaUrl, playerState, setPlayerState]);
 
   const { hasVideo } = playerState;
 

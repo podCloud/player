@@ -1,9 +1,19 @@
-import React from "react";
-
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
+import React from "react";
+
 const client = new ApolloClient({
-  uri: "https://feeds.podcloud.fr/graphql",
+  uri: (() => {
+    if (
+      document.location.hostname.includes("podcloud.test") ||
+      document.location.hostname.includes("lepodcast.test") ||
+      document.location.hostname.includes("localhost")
+    ) {
+      return "https://feeds.podcloud.test/graphql";
+    }
+
+    return "https://feeds.podcloud.fr/graphql";
+  })(),
   cache: new InMemoryCache(),
 });
 

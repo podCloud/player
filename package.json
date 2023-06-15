@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@mebtte/react-media-session": "^1.1.2",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",

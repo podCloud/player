@@ -1,26 +1,24 @@
-import React, { useState } from "react";
-
-import { isInFrame, resizeFrame, isPlayerPortrait } from "../utils";
-
-import EpisodesList from "./EpisodesList";
-
-import EpisodeTitle from "./EpisodeTitle";
-import PodcastTitle from "./PodcastTitle";
-
-import BackgroundCover from "./BackgroundCover";
-
-import MediaPlayer from "./MediaPlayer";
-
-import PodCloud from "./Icons/PodCloud";
-
-import classnames from "classnames";
-import styles from "./Player.module.scss";
-
 import {
+  PlayerControls,
   PlayerProgressBar,
   PlayerTimecodes,
-  PlayerControls,
 } from "./PlayerElements";
+import React, { useState } from "react";
+import {
+  isInFrame,
+  isPlayerPortrait,
+  resizeFrame,
+  useUrlOptions,
+} from "../utils";
+
+import BackgroundCover from "./BackgroundCover";
+import EpisodeTitle from "./EpisodeTitle";
+import EpisodesList from "./EpisodesList";
+import MediaPlayer from "./MediaPlayer";
+import PodCloud from "./Icons/PodCloud";
+import PodcastTitle from "./PodcastTitle";
+import classnames from "classnames";
+import styles from "./Player.module.scss";
 
 const Player = ({
   currentEpisode,
@@ -32,14 +30,19 @@ const Player = ({
   const [episodesListVisible, setEpisodesListVisible] = useState(false);
   const hasEpisodes = episodesList?.length > 0;
   const showEpisodesListBtn = episodesList?.loading || hasEpisodes;
+  const { fixedSize } = useUrlOptions();
 
   const showHideEpisodesList = (open) => {
-    resizeFrame(open);
+    if (!fixedSize) resizeFrame(open);
+
     window.setTimeout(() => setEpisodesListVisible(open), 150);
-    window.setTimeout(() => resizeFrame(open), 450);
+
+    if (!fixedSize) {
+      window.setTimeout(() => resizeFrame(open), 450);
+    }
   };
 
-      resizeFrame();
+  if (!fixedSize) resizeFrame();
 
   return (
     <>

@@ -19,6 +19,8 @@ const playerState = atom({
     should_autoplay: false,
     minus15: () => console.log("No player ref yet"),
     plus15: () => console.log("No player ref yet"),
+    play: () => console.log("No player ref yet"),
+    pause: () => console.log("No player ref yet"),
     playPause: () => console.log("No player ref yet"),
     seekToPercent: () => console.log("No player ref yet"),
     togglePlaybackRate: () => console.log("No player ref yet"),

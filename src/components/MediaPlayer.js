@@ -1,16 +1,12 @@
-import React, { useRef, useEffect } from "react";
-
-import playerStore from "../stores/player";
-
-import { useRecoilState } from "recoil";
-
-import classnames from "classnames";
-
-import playerjs from "player.js";
-
-import styles from "./MediaPlayer.module.scss";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import EpisodeCover from "./EpisodeCover";
+import classnames from "classnames";
+import playerStore from "../stores/player";
+import playerjs from "player.js";
+import styles from "./MediaPlayer.module.scss";
+import { useMediaSession } from "@mebtte/react-media-session";
+import { useRecoilState } from "recoil";
 
 const MediaPlayer = ({ currentEpisode }) => {
   const player = useRef();
@@ -29,6 +25,7 @@ const MediaPlayer = ({ currentEpisode }) => {
       setPlayerState((playerState) => {
         return {
           ...playerState,
+          ref: ref,
           minus15: () => {
             ref.currentTime = ref.currentTime - 15;
             if (ref.paused) {
@@ -44,6 +41,14 @@ const MediaPlayer = ({ currentEpisode }) => {
                 ref.dispatchEvent(new ErrorEvent(error, {}));
               });
             }
+          },
+          play: () => {
+            ref.play().catch((error) => {
+              ref.dispatchEvent(new ErrorEvent(error, {}));
+            });
+          },
+          pause: () => {
+            ref.pause();
           },
           playPause: () => {
             const loading = ref.seeking || ref.networkState === 2;
@@ -127,6 +132,37 @@ const MediaPlayer = ({ currentEpisode }) => {
       events.forEach(bindPlayer);
     }
   }, [ref, setPlayerState]);
+
+  const title = currentEpisode.title;
+  const album = currentEpisode.podcast?.title;
+  const artist = album;
+  const artwork = currentEpisode.enclosure?.cover?.medium_url;
+
+  const mediaSessionMetadata = useMemo(
+    () => ({
+      title,
+      artist,
+      album,
+      artwork: artwork
+        ? [{ src: artwork, sizes: "512x512", type: "image/png" }]
+        : [],
+    }),
+    [title, artist, album, artwork]
+  );
+
+  const { play, pause, minus15, plus15 } = playerState;
+
+  const mediaSessionControls = {
+    onPlay: useCallback(play, [play]),
+    onPause: useCallback(pause, [pause]),
+    onSeekBackward: useCallback(minus15, [minus15]),
+    onSeekForward: useCallback(plus15, [plus15]),
+  };
+
+  useMediaSession({
+    ...mediaSessionMetadata,
+    ...mediaSessionControls,
+  });
 
   const { _id: episodeID, enclosure_url: mediaUrl } = currentEpisode;
 

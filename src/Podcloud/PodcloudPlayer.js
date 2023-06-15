@@ -1,32 +1,15 @@
 import React, { useEffect } from "react";
-
-import PodcloudProvider from "./PodcloudProvider";
+import { resizeFrame, useUrlOptions } from "../utils.js";
 
 import PodcloudPlaylistLoader from "./PodcloudPlaylistLoader";
 import PodcloudPodcastEpisodeLoader from "./PodcloudPodcastEpisodeLoader";
-
+import PodcloudProvider from "./PodcloudProvider";
 import { debounce } from "debounce";
 
-import { resizeFrame, parseOpts } from "../utils.js";
-
-const DEFAULT_OPTS = { list: false, fixedSize: false };
-
 const PodcloudPlayer = () => {
-  const opts = Object.assign(
-    DEFAULT_OPTS,
-    ...[
-      document.querySelector("meta[property='podcloud:player']")?.content || "",
-      document.location.pathname.substring(
-        document.location.pathname.lastIndexOf("player")
-      ),
-    ].map(parseOpts)
-  );
+  const opts = useUrlOptions();
 
-  console.log({ player_options: opts });
-
-  const list = opts.list;
-  const fixedSize = opts.fixedSize;
-  const guid = opts.guid;
+  const { list, fixedSize, guid } = opts;
 
   const [user_id, pl_id] = `${opts.playlist}`.split("-");
   const playlist_ids = user_id && pl_id ? { user_id, id: pl_id } : null;

@@ -123,6 +123,24 @@ export const parseOpts = (str) =>
       return opts;
     }, {});
 
+const DEFAULT_OPTS = { list: false, fixedSize: false };
+
+export const useUrlOptions = () => {
+  const opts = Object.assign(
+    DEFAULT_OPTS,
+    ...[
+      document.querySelector("meta[property='podcloud:player']")?.content || "",
+      document.location.pathname.substring(
+        document.location.pathname.lastIndexOf("player")
+      ),
+    ].map(parseOpts)
+  );
+
+  console.log({ player_options: opts });
+
+  return opts;
+};
+
 export const isInFrame = () => {
   try {
     return window.self !== window.top;

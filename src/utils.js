@@ -107,6 +107,8 @@ const parseOptVal = (val) => {
   return val;
 };
 
+const camelize = (s) => s.replace(/-./g, (x) => x[1].toUpperCase());
+
 export const parseOpts = (str) =>
   str
     .split("/")
@@ -115,8 +117,10 @@ export const parseOpts = (str) =>
     .flat()
     .filter((a) => typeof a === "string" && a.trim().length)
     .reduce((opts, opt) => {
-      const [key, val] = opt.split(":");
-      console.log({ key, val });
+      const [rawKey, val] = opt.split(":");
+      const key = camelize(rawKey);
+
+      console.log("Adding options", { rawKey, key, val });
 
       opts[key] = parseOptVal(val);
 

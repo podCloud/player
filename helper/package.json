@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack"
   },
-  "dependencies": {},
   "browserslist": {
     "production": [
       ">0.2%",
@@ -22,6 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^9.1.2",
     "prettier": "^2.1.2",
     "webpack": "^5.10.3",
     "webpack-cli": "^4.2.0"

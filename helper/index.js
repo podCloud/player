@@ -1,7 +1,10 @@
 window.addEventListener(
   "message",
   (event) => {
-    const data = JSON.parse(`${event?.data?.["trim"]?.()}`);
+    const text_data = `${event?.data?.["trim"]?.()}`;
+    if (!text_data?.includes("iframe.resize")) return;
+
+    const data = JSON.parse(text_data);
     if (data?.height) {
       Array.prototype.forEach.call(
         document.getElementsByTagName("iframe"),

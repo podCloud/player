@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
-import EpisodeCover from "./EpisodeCover";
-import classnames from "classnames";
-import playerStore from "../stores/player";
-import playerjs from "player.js";
-import styles from "./MediaPlayer.module.scss";
 import { useMediaSession } from "@mebtte/react-media-session";
+import classnames from "classnames";
+import playerjs from "player.js";
 import { useRecoilState } from "recoil";
+import playerStore from "../stores/player";
+import EpisodeCover from "./EpisodeCover";
+import styles from "./MediaPlayer.module.scss";
 
 const MediaSessionHandler = ({
   mediaSessionMetadata,
   mediaSessionControls,
 }) => {
-  if (!window.MediaMetadata || !window.MediaSessionAction) {
+  // Here we need to force disable this hook when not in a browser supporting media session
+  if (!window.MediaMetadata || !navigator?.mediaSession) {
     return null;
   }
 
-  // Here we need to force disable this hook when not in a browser supporting media session
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useMediaSession({
     ...mediaSessionMetadata,

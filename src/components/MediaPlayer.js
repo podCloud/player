@@ -8,6 +8,24 @@ import styles from "./MediaPlayer.module.scss";
 import { useMediaSession } from "@mebtte/react-media-session";
 import { useRecoilState } from "recoil";
 
+const MediaSessionHandler = ({
+  mediaSessionMetadata,
+  mediaSessionControls,
+}) => {
+  if (!window.MediaMetadata || !window.MediaSessionAction) {
+    return null;
+  }
+
+  // Here we need to force disable this hook when not in a browser supporting media session
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useMediaSession({
+    ...mediaSessionMetadata,
+    ...mediaSessionControls,
+  });
+
+  return null;
+};
+
 const MediaPlayer = ({ currentEpisode }) => {
   const player = useRef();
 
@@ -159,11 +177,6 @@ const MediaPlayer = ({ currentEpisode }) => {
     onSeekForward: useCallback(plus15, [plus15]),
   };
 
-  useMediaSession({
-    ...mediaSessionMetadata,
-    ...mediaSessionControls,
-  });
-
   const { _id: episodeID, enclosure_url: mediaUrl } = currentEpisode;
 
   useEffect(() => {
@@ -188,6 +201,9 @@ const MediaPlayer = ({ currentEpisode }) => {
 
   return (
     <>
+      <MediaSessionHandler
+        {...{ mediaSessionMetadata, mediaSessionControls }}
+      />
       <video
         ref={player}
         className={classnames(styles.player, { [styles.hidden]: !hasVideo })}

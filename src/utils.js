@@ -137,6 +137,9 @@ export const useUrlOptions = () => {
       document.location.pathname.substring(
         document.location.pathname.lastIndexOf("player")
       ),
+      document.location.hash.substring(
+        document.location.hash.lastIndexOf("/player/")
+      ),
     ].map(parseOpts)
   );
 
